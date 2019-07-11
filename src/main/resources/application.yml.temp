@@ -1,0 +1,68 @@
+
+miniprogram:
+  appid: wxba637106f41fe070
+  appsecret: 5099fcef0b531af4a997f3ecb0153011
+
+posmain:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql:///threehelper?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 82894996
+
+  druid:
+    initialSize: 5
+    minIdle: 5
+    maxActive: 40
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,log4j
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
+
+supermart:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql:///threehelper?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 82894996
+  druid:
+    initialSize: 5
+    minIdle: 5
+    maxActive: 40
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,log4j
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
+server:
+  port: 1589
+  servlet:
+    context-path: /Thirdparty
+
+
+
+
+
+
+
+
+
+
+
+
+

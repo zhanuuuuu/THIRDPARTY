@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hlyf.thirdparty.dao.miniprogram.meituanDao">
+
+    <!--不用管-->
+    <update id="ExecProce"  >
+        <![CDATA[
+        		{call p_hpCallJsonToSql_w(
+        					#{callJsonText,mode=IN,jdbcType=VARCHAR}
+        					)
+        		}
+    	]]>
+    </update>
+
+    <!--登录-->
+    <select id="ExecProceLogin" parameterType="java.lang.String" resultType="com.hlyf.thirdparty.domain.LoginResult">
+        <![CDATA[
+        		{call p_hpCallJsonToSql_w(
+        					#{callJsonText,mode=IN,jdbcType=VARCHAR}
+        					)
+        		}
+    	]]>
+    </select>
+
+    <!--获取门店商品-->
+    <select id="GetStoreGoodsInfo" parameterType="java.lang.String" resultType="com.hlyf.thirdparty.domain.StoreGoodsInfo">
+        <![CDATA[
+        		{call p_hpCallJsonToSql_w(
+        					#{callJsonText,mode=IN,jdbcType=VARCHAR}
+        					)
+        		}
+    	]]>
+    </select>
+
+    <!--获取门店列表-->
+    <select id="GetStoreInfo" parameterType="java.lang.String" resultType="com.hlyf.thirdparty.domain.StoreInfo">
+        <![CDATA[
+        		{call p_hpCallJsonToSql_w(
+        					#{callJsonText,mode=IN,jdbcType=VARCHAR}
+        					)
+        		}
+    	]]>
+    </select>
+
+    <!--商品 上架 下架-->
+    <select id="GoodsSkusellStatusD" parameterType="java.lang.String" resultType="com.hlyf.thirdparty.domain.RepResult">
+        <![CDATA[
+        		{call p_hpCallJsonToSql_w(
+        					#{callJsonText,mode=IN,jdbcType=VARCHAR}
+        					)
+        		}
+    	]]>
+    </select>
+
+</mapper>
