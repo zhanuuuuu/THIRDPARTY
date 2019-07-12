@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hlyf.thirdparty.dao.miniprogram.OfflineGoodDao">
+
+
+    <select id="GetSearchGoodsByName" parameterType="java.lang.String" resultType="com.hlyf.thirdparty.domain.SearchGoods">
+        <![CDATA[
+        		{call p_hpCallJsonToSql_w(
+        					#{callJsonText,mode=IN,jdbcType=VARCHAR}
+        					)
+        		}
+    	]]>
+    </select>
+
+</mapper>

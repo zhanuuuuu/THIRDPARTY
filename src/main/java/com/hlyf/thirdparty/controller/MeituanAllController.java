@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -289,8 +290,8 @@ public class MeituanAllController {
                 com.alibaba.fastjson.JSONObject.toJSONString(
                 new ResultMsg(true, ""+ GlobalEumn.IMAGESJSON_ERROR.getCode(),
                         GlobalEumn.IMAGESJSON_ERROR.getMesssage(), ""))
-                :com.alibaba.fastjson.JSONObject.toJSONString(
+                : StringEscapeUtils.unescapeJavaScript(com.alibaba.fastjson.JSONObject.toJSONString(
                 new ResultMsg(true, ""+ GlobalEumn.SUCCESS.getCode(),
-                        GlobalEumn.SUCCESS.getMesssage(), com.alibaba.fastjson.JSONObject.toJSONString(urlImages)));
+                        GlobalEumn.SUCCESS.getMesssage(), com.alibaba.fastjson.JSONObject.toJSONString(urlImages))));
     }
 }

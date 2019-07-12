@@ -144,6 +144,13 @@ public class MtServiceImp implements MtService,MtpushConfig {
 
                     break;
 
+                case ORDERSURE://已确认订单
+
+                    break;
+                case ORDERCOMPLETE://已完成订单
+
+                    break;
+
                 default:
                     log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+" 我进来了 签名一直:{}",sigByMe);
                     System.out.println(" 我进来了 签名一直:{}"+sigByMe);

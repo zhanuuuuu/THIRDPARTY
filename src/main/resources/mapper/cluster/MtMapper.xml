@@ -12,6 +12,27 @@
     	]]>
     </update>
 
+
+
+    <select id="ExecProceGetData" parameterType="java.lang.String" resultType="com.hlyf.thirdparty.domain.RepResult">
+        <![CDATA[
+        		{call p_hpCallJsonToSql_w(
+        					#{callJsonText,mode=IN,jdbcType=VARCHAR}
+        					)
+        		}
+    	]]>
+    </select>
+
+
+    <select id="ExecProceGetDataList" parameterType="java.lang.String" resultType="com.hlyf.thirdparty.domain.RepResult">
+        <![CDATA[
+        		{call p_hpCallJsonToSql_w(
+        					#{callJsonText,mode=IN,jdbcType=VARCHAR}
+        					)
+        		}
+    	]]>
+    </select>
+
     <!--登录-->
     <select id="ExecProceLogin" parameterType="java.lang.String" resultType="com.hlyf.thirdparty.domain.LoginResult">
         <![CDATA[

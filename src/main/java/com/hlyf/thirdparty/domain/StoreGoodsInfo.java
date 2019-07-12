@@ -36,6 +36,6 @@ public class StoreGoodsInfo {
     private String GoodsGroupId;
     private String groupName;
     private String Status;
-    private String picture;
+    private String ImageUrl;
 
 }

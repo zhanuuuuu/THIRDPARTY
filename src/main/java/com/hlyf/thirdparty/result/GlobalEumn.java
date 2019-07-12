@@ -17,7 +17,9 @@ public enum  GlobalEumn implements GlobalInfo {
     MINIPROGRAM_APPSECRET_ERROR(2003,"登陆失败,请先注册"),
     MINIPROGRAM_EMPTY(2004,"数据集为空"),
     MINIPROGRAM_GOODONLINE(2005,"不符合上架条件"),
-
+    MINIPROGRAM_PRICE(2006,"不符合调价规则"),
+    MINIPROGRAM_ADDGOOD(2007,"不符新增商品规则"),
+    MINIPROGRAM_CATEGORY(2008,"不符新增商品分类规则"),
     SYSTEM_ERROR(9999,"参数上传有误,请检查参数");
     private int code;
 

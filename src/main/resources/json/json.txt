@@ -1,0 +1,87 @@
+
+新增商品的json
+{
+	"sqltext": "createStore",
+	"appId": "4115",
+	"appSecret": "f0b1b7d92d96485e704316604a24bd5a",
+	"O2OChannelId": "1",
+	"app_poi_code": "",
+	"operate_type": "",
+	"app_food_code": "",
+	"name": "",
+	"skus": "",
+	"price": "",
+	"min_order_count": "",
+	"unit": "",
+	"box_num": "",
+	"box_price": "",
+	"category_code": "",
+	"category_name": "",
+	"is_sold_out": "",
+	"picture": ""
+}
+
+整理后的数据
+{
+	"sqltext": "AddVirtualShopGoods",
+	"appId": "4115",
+	"appSecret": "f0b1b7d92d96485e704316604a24bd5a",
+	"O2OChannelId": "1",
+	"goodsid": "",
+	"Name": "",
+	"Barcode": "",
+	"IsFresh": "",
+	"IsPacked": "",
+	"spec": "",
+	"Unit": "",
+	"ImageUrl": "",
+	"newPrice": "",
+	"min_order_count": "",
+	"box_num": "",
+	"box_price": "",
+	"skus": "",
+	"onStatus": "",
+	"virtualshopid": "",
+	"Description": "",
+	"goodsGroupId": "",
+	"is_sold_out": "",
+	"phone": "",
+	"sqltextback": "changeVirtualShopGoodsStatus"
+}
+
+
+{
+	"sqltext": "AddVirtualShopGoods",
+	"appId": "4115",
+	"appSecret": "f0b1b7d92d96485e704316604a24bd5a",
+	"O2OChannelId": "1",
+	"goodsid": "",
+	"Name": "",
+	"Barcode": "",
+	"IsFresh": "是否生鲜 （0：否，1：是）",
+	"IsPacked": "是否打包卖（0：否，1：是）",
+	"spec": "",
+	"Unit": "",
+	"ImageUrl": "",
+	"newPrice": "",
+	"min_order_count": "一个订单中此商品的最小购买量",
+	"box_num": "打包盒数量",
+	"box_price": "打包盒单价",
+	"skus":  [{
+            		"sku_id": "0101",
+            		"spec": "1000W",
+            		"price": "55",
+            		"stock": "10",
+            		"box_num": "1",
+            		"box_price": "0"
+            	}],
+	"onStatus": "是否允许上下架 0:允许，1只允许上架，2只允许下架",
+	"virtualshopid": "",
+	"Description": "",
+	"goodsGroupId": "分类id",
+	"is_sold_out": "商品上下架状态，字段取值范围：0-上架，1-下架。",
+	"phone": "",
+	"sku_id": "",
+	"stock": "",
+	"sqltextback": "changeVirtualShopGoodsStatus"
+}

@@ -7,23 +7,16 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 /**
- * Created by Administrator on 2019-07-10.
+ * Created by Administrator on 2019-07-11.
  */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Accessors(chain=true)
 @ToString
-public class RepResult {
-    private String result;
+public class ShopGoodsPrice {
+
+    private String  result;
     private String  newPrice;
     private String  mtprice;
-    private String  goodsid;
-
-    /*
-    * 接收类别的
-    */
-    private String GoodsGroupId;
-    private String  GoodsGroupName;
-
 }

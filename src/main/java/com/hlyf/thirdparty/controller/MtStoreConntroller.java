@@ -376,7 +376,48 @@ public class MtStoreConntroller {
             e.printStackTrace();
             return com.alibaba.fastjson.JSONObject.toJSONString(
                     new ResultMsg(true, ""+ GlobalEumn.PARAMETERS_ERROR.getCode(),
-                            GlobalEumn.PARAMETERS_ERROR.getMesssage(), (ResultMsg) null));
+                            GlobalEumn.PARAMETERS_ERROR.getMesssage(), ""));
+        }
+        return result;
+    }
+
+    @ApiOperation(value="获取线下门店商品", notes="获取线下门店商品")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "jsondata", value = "{\n" +
+                    "\t\"sqltext\": \"getStoreGoodsInfo\",\n" +
+                    "\t\"appId\": \"4115\",\n" +
+                    "\t\"appSecret\": \"f0b1b7d92d96485e704316604a24bd5a\",\n" +
+                    "\t\"O2OChannelId\": \"1\",\n" +
+                    "\t\"virtualshopid\": \"虚拟门店标号\",\n" +
+                    "\t\"GoodsGroupId\": \"GoodsGroupId\",\n" +
+                    "\t\"phone\": \"手机号\"\n" +
+                    "}",paramType ="query" ,required = true,dataType = "string",defaultValue = "4115"),
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful — 请求已完成",reference="77777",responseContainer="8888888"),
+            @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+            @ApiResponse(code = 403, message = "服务器拒绝请求"),
+            @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+            @ApiResponse(code = 404, message = "服务器找不到给定的资源；文档不存在"),
+            @ApiResponse(code = 500, message = "服务器不能完成请求")})
+    @RequestMapping(value = "api/offline/poi/getstoregoodsinfo", method = RequestMethod.POST)
+    @ResponseBody
+    public  String offlinePoigetStoreGoodsInfo(@RequestParam(value = "jsondata",required = true) String jsondata,
+                                       HttpServletRequest request){
+        String result="";
+        try {
+            //第三种方式
+            Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);
+            System.out.println("获取线下门店商品");
+            for (Object obj : maprequest.keySet()){
+                System.out.println("key为："+obj+"  值为："+maprequest.get(obj));
+            }
+            result=this.mtStoreService.GetStoreGoodsInfoS(jsondata);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return com.alibaba.fastjson.JSONObject.toJSONString(
+                    new ResultMsg(true, ""+ GlobalEumn.PARAMETERS_ERROR.getCode(),
+                            GlobalEumn.PARAMETERS_ERROR.getMesssage(), ""));
         }
         return result;
     }

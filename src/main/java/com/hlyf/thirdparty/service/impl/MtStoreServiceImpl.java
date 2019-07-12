@@ -27,7 +27,7 @@ public class MtStoreServiceImpl implements MtStoreService {
     public String GetStoreInfoS(String callJsonText) {
         try{
             List<StoreInfo> storeInfoList=this.mtStoreDao.GetStoreInfo(callJsonText);
-            if(storeInfoList!=null){
+            if(storeInfoList!=null  && storeInfoList.size()>0){
                 return JSONObject.toJSONString(
                         new ResultMsg(true, GlobalEumn.SUCCESS.getCode()+"",
                                 GlobalEumn.SUCCESS.getMesssage(),storeInfoList));
@@ -50,7 +50,7 @@ public class MtStoreServiceImpl implements MtStoreService {
     public String GetStoreGoodsInfoS(String callJsonText) {
         try{
             List<StoreGoodsInfo> storeInfoList=this.mtStoreDao.GetStoreGoodsInfo(callJsonText);
-            if(storeInfoList!=null){
+            if(storeInfoList!=null && storeInfoList.size()>0 ){
                 return JSONObject.toJSONString(
                         new ResultMsg(true, GlobalEumn.SUCCESS.getCode()+"",
                                 GlobalEumn.SUCCESS.getMesssage(),storeInfoList));

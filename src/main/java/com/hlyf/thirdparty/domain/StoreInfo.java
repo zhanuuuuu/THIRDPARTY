@@ -31,5 +31,8 @@ public class StoreInfo {
     private String is_online;
     private String third_tag_name;
 
+    private String appid;
+    private String appSecret;
+
 
 }

@@ -18,11 +18,12 @@ import lombok.experimental.Accessors;
 @Accessors(chain=true)
 @ToString
 public class LoginResult {
-
    @JSONField(serialzeFeatures= {SerializerFeature.WriteMapNullValue})
    private String result;
    private String shopid;
    private String shopName;
    private String o2ochannelId;
    private String o2ochannelName;
+   private String virtualshopid;
+   private String virtualshopName;
 }

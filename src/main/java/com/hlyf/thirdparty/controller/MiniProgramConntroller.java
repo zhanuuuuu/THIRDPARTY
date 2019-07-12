@@ -176,9 +176,10 @@ public class MiniProgramConntroller {
                     "\t\"appId\": \"4115\",\n" +
                     "\t\"appSecret\": \"f0b1b7d92d96485e704316604a24bd5a\",\n" +
                     "\t\"O2OChannelId\": \"1\",\n" +
-                    "\t\"virtualshopid\": \"\",\n" +
-                    "\t\"phone\": \"\"\n" +
-                    "} ", paramType ="query" ,required = true,dataType = "string")
+                    "\t\"virtualshopid\": \"虚拟门店标号\",\n" +
+                    "\t\"GoodsGroupId\": \"GoodsGroupId\",\n" +
+                    "\t\"phone\": \"手机号\"\n" +
+                    "}", paramType ="query" ,required = true,dataType = "string")
     })
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successful — 请求已完成",reference="77777",responseContainer="8888888"),

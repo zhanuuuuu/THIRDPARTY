@@ -18,6 +18,9 @@ public interface meituanDao {
 
     Integer ExecProce(@Param("callJsonText")String callJsonText);;
 
+    RepResult ExecProceGetData(@Param("callJsonText")String callJsonText);
+
+    List<RepResult> ExecProceGetDataList(@Param("callJsonText")String callJsonText);
 
     List<LoginResult> ExecProceLogin(@Param("callJsonText")String callJsonText);
 
