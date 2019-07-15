@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -100,7 +101,7 @@ public class OfflineGoodConntroller {
         try {
             //第三种方式
             Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);
-            System.out.println("查询商品 模糊匹配");
+            System.out.println("商品改价");
             for (Object obj : maprequest.keySet()){
                 System.out.println("key为："+obj+"  值为："+maprequest.get(obj));
             }
@@ -170,11 +171,14 @@ public class OfflineGoodConntroller {
         try {
             //第三种方式
             Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);
-            System.out.println("查询商品 模糊匹配");
-            for (Object obj : maprequest.keySet()){
-                System.out.println("key为："+obj+"  值为："+maprequest.get(obj));
+            System.out.println("创建商品 模糊匹配");
+            Map<String,String> new_map_String = new HashMap();
+            for(Object key:maprequest.keySet()){
+                new_map_String.put(key+"", String.valueOf(maprequest.get(key)));
+                System.out.println(key+" : "+String.valueOf(maprequest.get(key)));
+                System.out.println("key为："+key+"  值为："+String.valueOf(maprequest.get(key)));
             }
-            result=this.offlineGoodService.AddVirtualShopGoods(maprequest,jsondata,
+            result=this.offlineGoodService.AddVirtualShopGoods(new_map_String,jsondata,
                     "https://waimaiopen.meituan.com/api/v1/retail/initdata",
                     "POST");
         } catch (Exception e) {
@@ -195,7 +199,7 @@ public class OfflineGoodConntroller {
                     "\t\"appSecret\": \"f0b1b7d92d96485e704316604a24bd5a\",\n" +
                     "\t\"O2OChannelId\": \"1\",\n" +
                     "\t\"app_poi_code\": \"门店编号\",\n" +
-                    "\t\"category_code_origin\": \"原始的商品分类id\",\n" +
+                    "\t\"category_code\": \"原始的商品分类id\",\n" +
                     "\t\"category_name\": \"商品分类名称：(1)限定长度不超过8个字符\"\n" +
                     "}",paramType ="query" ,required = true,dataType = "string",defaultValue = "4115"),
     })
@@ -261,6 +265,51 @@ public class OfflineGoodConntroller {
             result=this.offlineGoodService.GetGoodsCategories(maprequest,jsondata,
                     "",
                     "");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return com.alibaba.fastjson.JSONObject.toJSONString(
+                    new ResultMsg(true, ""+ GlobalEumn.PARAMETERS_ERROR.getCode(),
+                            GlobalEumn.PARAMETERS_ERROR.getMesssage(), ""));
+        }
+        return result;
+    }
+
+    @ApiOperation(value="更改商品库存 （同步到美团）", notes="更改商品库存 （同步到美团）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "jsondata", value = "{\n" +
+                    "\t\"sqltext\": \"ChangeVirtualShopGoodsStock\",\n" +
+                    "\t\"appId\": \"4115\",\n" +
+                    "\t\"appSecret\": \"f0b1b7d92d96485e704316604a24bd5a\",\n" +
+                    "\t\"O2OChannelId\": \"1\",\n" +
+                    "\t\"virtualshopid\": \"虚拟门店标号\",\n" +
+                    "\t\"goodsId\": \"商品id\",\n" +
+                    "\t\"stock\": \"库存\",\n" +
+                    "\t\"sku_id\": \"sku_id需要上传\",\n" +
+                    "\t\"phone\": \"手机号\"\n" +
+                    "}",paramType ="query" ,required = true,dataType = "string",defaultValue = "4115"),
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful — 请求已完成",reference="77777",responseContainer="8888888"),
+            @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+            @ApiResponse(code = 403, message = "服务器拒绝请求"),
+            @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+            @ApiResponse(code = 404, message = "服务器找不到给定的资源；文档不存在"),
+            @ApiResponse(code = 500, message = "服务器不能完成请求")})
+    @RequestMapping(value = "api/offline/poi/ChangeVirtualShopGoodsStock", method = RequestMethod.POST)
+    @ResponseBody
+    public  String ChangeVirtualShopGoodsStock(@RequestParam(value = "jsondata",required = true) String jsondata,
+                                    HttpServletRequest request){
+        String result="";
+        try {
+            //第三种方式
+            Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);
+            System.out.println("更改商品库存");
+            for (Object obj : maprequest.keySet()){
+                System.out.println("key为："+obj+"  值为："+maprequest.get(obj));
+            }
+            result=this.offlineGoodService.ChangeVirtualShopGoodsStock(maprequest,jsondata,
+                    "https://waimaiopen.meituan.com/api/v1/retail/sku/stock",
+                    "POST");
         } catch (Exception e) {
             e.printStackTrace();
             return com.alibaba.fastjson.JSONObject.toJSONString(

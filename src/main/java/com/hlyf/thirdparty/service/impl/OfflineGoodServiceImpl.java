@@ -12,6 +12,7 @@ import com.hlyf.thirdparty.mertuanoverwrite.URLFactoryByZ;
 import com.hlyf.thirdparty.result.GlobalEumn;
 import com.hlyf.thirdparty.result.ResultMsg;
 import com.hlyf.thirdparty.service.OfflineGoodService;
+import com.hlyf.thirdparty.tool.MapRemoveNullUtil;
 import com.sankuai.meituan.waimai.opensdk.exception.ApiOpException;
 import com.sankuai.meituan.waimai.opensdk.exception.ApiSysException;
 import lombok.extern.slf4j.Slf4j;
@@ -79,16 +80,13 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
 
                         String afterMapdata= JSON.toJSONString(preMap);
                         log.info("商品调价 转出来的json格式 看下格式 ： {} ",afterMapdata);
-                        //这里符合我们上架规则才可以上架
-                        map.remove("virtualshopid");
-                        map.remove("phone");
-                        map.remove("goodsId");
-                        map.remove("sqltextback");
-                        Map parmsMap = CommonUtilImpl.clearMap(map);
+
                         Map<String,String> parmsMapTrue=new HashMap<String,String>();
                         parmsMapTrue.put("app_poi_code",(String)preMap.get("virtualshopid"));
-                        parmsMapTrue.put("food_data","[{\"app_food_code\":\""+(String)preMap.get("goodsId")+"\"," +
-                                "\"skus\":[{\"sku_id\":\""+(String)preMap.get("sku_id")+"\",\"price\":\""+repResult.getMtprice()+"\"}]");
+
+                        String skus="[{\"app_food_code\":\""+(String)preMap.get("GoodsId")+"\"," +
+                                "\"skus\":[{\"sku_id\":\""+(String)preMap.get("sku_id")+"\",\"price\":\""+repResult.getMtprice()+"\"}]}]";
+                        parmsMapTrue.put("food_data",skus.replaceAll("\\s","").replaceAll("\\n",""));
 
                         resultString = URLFactoryByZ.requestApi(method,
                                 url, systemParamsMap, parmsMapTrue);
@@ -131,14 +129,7 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
                     if(repResult!=null && repResult.getResult().equals("1")){
 
 
-                        String afterMapdata= JSON.toJSONString(preMap);
-                        log.info("商品新增 转出来的json格式 看下格式 ： {} ",afterMapdata);
                         //这里符合我们上架规则才可以上架
-                        map.remove("virtualshopid");
-                        map.remove("phone");
-                        map.remove("goodsId");
-                        map.remove("sqltextback");
-                        Map parmsMap = CommonUtilImpl.clearMap(map);
                         Map<String,Object> parmsMapTrue=new HashMap<String,Object>();
                         String skus="[{\n" +
                                 "\t\"sku_id\": \""+preMap.get("sku_id")+"\",\n" +
@@ -149,28 +140,71 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
                                 "\t\"box_price\": \""+preMap.get("box_price")+"\"\n" +
                                 "}]";
                         parmsMapTrue.put("app_poi_code",(String)preMap.get("virtualshopid"));
-                        parmsMapTrue.put("operate_type",1);
+                        parmsMapTrue.put("operate_type",1+"");
                         parmsMapTrue.put("app_food_code",repResult.getGoodsid());
                         parmsMapTrue.put("name",(String)preMap.get("Name"));
                         parmsMapTrue.put("description",(String)preMap.get("Description"));
-                        parmsMapTrue.put("skus",skus);
-                        parmsMapTrue.put("price",Float.valueOf(repResult.getMtprice()));
+                        parmsMapTrue.put("category_code",(String)preMap.get("goodsGroupId"));
+                        parmsMapTrue.put("skus",skus.replaceAll("\\s","").replaceAll("\\n",""));
+                        parmsMapTrue.put("price",Float.valueOf(repResult.getMtprice())+"");
                         parmsMapTrue.put("min_order_count",(String)preMap.get("min_order_count"));
                         parmsMapTrue.put("unit",(String)preMap.get("Unit"));
                         parmsMapTrue.put("is_sold_out",(String)preMap.get("is_sold_out"));
                         parmsMapTrue.put("picture",(String)preMap.get("ImageUrl"));
 
+                        String parmsMapTrueString= JSON.toJSONString(parmsMapTrue);
+
+                        System.out.println(parmsMapTrueString);
                         resultString = URLFactoryByZ.requestApi(method,
                                 url, systemParamsMap, parmsMapTrue);
+                        preMap.put("goodsid",repResult.getGoodsid());
+                        String afterMapdata= JSON.toJSONString(preMap);
+                        log.info("商品新增 转出来的json格式 看下格式 ： {} ",afterMapdata);
 
                         resultString=CommonUtilImpl.CommExe(resultString,afterMapdata,MtDao);
-
                     }else {
                         return JSONObject.toJSONString(
                                 new ResultMsg(true, GlobalEumn.MINIPROGRAM_ADDGOOD.getCode()+"",
                                         GlobalEumn.MINIPROGRAM_ADDGOOD.getMesssage(),""));
                     }
+
+//                    String afterMapdata= JSON.toJSONString(preMap);
+//                    log.info("商品新增 转出来的json格式 看下格式 ： {} ",afterMapdata);
+//                    //这里符合我们上架规则才可以上架
+//                    Map<String,Object> parmsMapTrue=new HashMap<String,Object>();
+//                    String skus="[{\n" +
+//                            "\t\"sku_id\": \""+preMap.get("sku_id")+"\",\n" +
+//                            "\t\"spec\": \""+preMap.get("spec")+"\",\n" +
+//                            "\t\"price\": \""+20+"\",\n" +
+//                            "\t\"stock\": \""+preMap.get("stock")+"\",\n" +
+//                            "\t\"box_num\": \""+preMap.get("box_num")+"\",\n" +
+//                            "\t\"box_price\": \""+preMap.get("box_price")+"\"\n" +
+//                            "}]";
+//                    parmsMapTrue.put("app_poi_code",(String)preMap.get("virtualshopid"));
+//                    parmsMapTrue.put("operate_type",1+"");
+//                    parmsMapTrue.put("app_food_code",(String)preMap.get("goodsid"));
+//                    parmsMapTrue.put("name",(String)preMap.get("Name"));
+//                    parmsMapTrue.put("description",(String)preMap.get("Description"));
+//                    parmsMapTrue.put("category_code",(String)preMap.get("goodsGroupId"));
+//                    parmsMapTrue.put("skus",skus.replaceAll("\\s","").replaceAll("\\n",""));
+//                    parmsMapTrue.put("price",20+"");
+//                    parmsMapTrue.put("min_order_count",(String)preMap.get("min_order_count"));
+//                    parmsMapTrue.put("unit",(String)preMap.get("Unit"));
+//                    parmsMapTrue.put("is_sold_out",(String)preMap.get("is_sold_out"));
+//                    parmsMapTrue.put("picture",(String)preMap.get("ImageUrl"));
+//
+//                    String parmsMapTrueString= JSON.toJSONString(parmsMapTrue);
+//
+//                    System.out.println("看这里：  "+parmsMapTrueString);
+//
+//                    //MapRemoveNullUtil.removeNullValue(parmsMapTrue);
+//
+//                    resultString = URLFactoryByZ.requestApi(method,
+//                            url, systemParamsMap, parmsMapTrue);
+//
+//                    resultString=CommonUtilImpl.CommExe(resultString,afterMapdata,MtDao);
                 }catch (Exception e){
+                    e.printStackTrace();
                     log.error("新增商品 调用我们的过程出错了 {}",e.getMessage());
                     return JSONObject.toJSONString(
                             new ResultMsg(true, GlobalEumn.SYSTEM_ERROR.getCode()+"",
@@ -194,7 +228,7 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
                 String sqltext=(String) map.get("sqltext");
                 try{
                         Map preMap=map;
-                        preMap.put("GoodsGroupId",(String)preMap.get("category_code_origin") );
+                        preMap.put("GoodsGroupId",(String)preMap.get("category_code") );
                         preMap.put("GoodsGroupName",(String)preMap.get("category_name") );
                         String afterMapdata= JSON.toJSONString(preMap);
                         log.info("创建商品分类 转出来的json格式 看下格式 ： {} ",afterMapdata);
@@ -204,6 +238,42 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
                         resultString=CommonUtilImpl.CommExe(resultString,afterMapdata,MtDao);
                 }catch (Exception e){
                     log.error("创建商品分类 调用我们的过程出错了 {}",e.getMessage());
+                    return JSONObject.toJSONString(
+                            new ResultMsg(true, GlobalEumn.SYSTEM_ERROR.getCode()+"",
+                                    GlobalEumn.SYSTEM_ERROR.getMesssage(),""));
+                }
+                break;
+            default:
+                log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);
+                break;
+        }
+        return resultString;
+    }
+
+    @Override
+    public String ChangeVirtualShopGoodsStock(Map map, String data, String url, String method) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
+        String resultString="";
+        Integer type=Integer.valueOf((String) map.get("O2OChannelId"));
+        switch (type){
+            case 1://美团
+                Map systemParamsMap = URLFactoryByZ.getsystemParamsMap((String) map.get("appId"), (String) map.get("appSecret"));
+                try{
+                        Map preMap=map;
+                        String afterMapdata= JSON.toJSONString(preMap);
+                        log.info("商品调库存 转出来的json格式 看下格式 ： {} ",afterMapdata);
+                        Map<String,String> parmsMapTrue=new HashMap<String,String>();
+                        parmsMapTrue.put("app_poi_code",(String)preMap.get("virtualshopid"));
+
+                        String sku="[{\"app_food_code\":\""+(String)preMap.get("goodsId")+"\"," +
+                            "\"skus\":[{\"sku_id\":\""+(String)preMap.get("sku_id")+"\",\"stock\":\""+(String)preMap.get("stock")+"\"}]}]";
+                        parmsMapTrue.put("food_data",
+                                sku.replaceAll("\\s","").replaceAll("\\n","")
+                        );
+                        resultString = URLFactoryByZ.requestApi(method,
+                                url, systemParamsMap, parmsMapTrue);
+                        resultString=CommonUtilImpl.CommExe(resultString,afterMapdata,MtDao);
+                }catch (Exception e){
+                    log.error("更改商品库存 调用我们的过程出错了 {}",e.getMessage());
                     return JSONObject.toJSONString(
                             new ResultMsg(true, GlobalEumn.SYSTEM_ERROR.getCode()+"",
                                     GlobalEumn.SYSTEM_ERROR.getMesssage(),""));

@@ -13,6 +13,7 @@ import com.hlyf.thirdparty.result.ResultMsg;
 import com.hlyf.thirdparty.service.MiniService;
 import com.hlyf.thirdparty.tool.AesCbcUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -43,6 +44,30 @@ public class MiniServiceImpl implements MiniService,MpUrlConfig {
             resultString=restTemplate.getForObject(
                     String.format(GET_OPENDID,
                             weChatConfig.getAppid(),weChatConfig.getAppsecret(),code),
+                    String.class);
+            resultString= JSONObject.toJSONString(
+                    new ResultMsg(true, GlobalEumn.SUCCESS.getCode()+"",GlobalEumn.SUCCESS.getMesssage(),resultString));
+        }catch (Exception e){
+            log.error(Thread.currentThread().getStackTrace()[1].getMethodName()+"出错了 {}",e.getMessage());
+            e.printStackTrace();
+            resultString= JSONObject.toJSONString(
+                    new ResultMsg(true, GlobalEumn.MINIPROGRAM_ERROR.getCode()+"",GlobalEumn.MINIPROGRAM_ERROR.getMesssage(),resultString));
+        }
+        return resultString;
+    }
+
+    @Override
+    public String GetOpenIOrUniuiddByCode(String code, String appid, String appsecret) {
+        String resultString="";
+        try{
+            if(StringUtils.isEmpty(code) || StringUtils.isEmpty(appid) || StringUtils.isEmpty(appsecret)){
+                resultString= JSONObject.toJSONString(
+                        new ResultMsg(true, GlobalEumn.MINIPROGRAM_ERROR.getCode()+"",GlobalEumn.MINIPROGRAM_ERROR.getMesssage(),resultString));
+                return resultString;
+            }
+            resultString=restTemplate.getForObject(
+                    String.format(GET_OPENDID,
+                            appid,appsecret,code),
                     String.class);
             resultString= JSONObject.toJSONString(
                     new ResultMsg(true, GlobalEumn.SUCCESS.getCode()+"",GlobalEumn.SUCCESS.getMesssage(),resultString));

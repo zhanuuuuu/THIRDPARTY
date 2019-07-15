@@ -22,6 +22,8 @@ public interface OfflineGoodService {
     String AddGoodsCategory(Map map, String data, String url, String method) throws ApiSysException,
             ApiOpException, UnsupportedEncodingException;
 
+    String ChangeVirtualShopGoodsStock(Map map, String data, String url, String method) throws ApiSysException,
+            ApiOpException, UnsupportedEncodingException;
     String GetGoodsCategories(Map map, String data, String url, String method) throws ApiSysException,
             ApiOpException, UnsupportedEncodingException;
 

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -288,8 +289,8 @@ public class MtGoodConntroller {
         return result;
     }
 
-    @ApiOperation(value="retail/sku/sellStatus 批量更新售卖状态 上架",
-            notes="retail/sku/sellStatus 批量更新售卖状态 上架")
+    @ApiOperation(value="retail/sku/sellStatus 批量更新售卖状态 上架（线下）",
+            notes="retail/sku/sellStatus 批量更新售卖状态 上架 （线下）")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "jsondata",
                     value = "{\n" +
@@ -322,10 +323,14 @@ public class MtGoodConntroller {
         try {
             Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);
             System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName()+"retail/sku/sellStatus 批量更新售卖状态 ");
-            for (Object obj : maprequest.keySet()){
-                System.out.println("key为："+obj+"  值为："+maprequest.get(obj));
+
+            Map<String,String> new_map_String = new HashMap();
+            for(Object key:maprequest.keySet()){
+                new_map_String.put(key+"", String.valueOf(maprequest.get(key)));
+                System.out.println(key+" : "+String.valueOf(maprequest.get(key)));
+                System.out.println("key为："+key+"  值为："+String.valueOf(maprequest.get(key)));
             }
-            result=mtGoodService.GoodsSkusellStatusS(maprequest,jsondata,
+            result=mtGoodService.GoodsSkusellStatusS(new_map_String,jsondata,
                     "https://waimaiopen.meituan.com/api/v1/retail/sku/sellStatus",
                     "POST");
         } catch (ApiSysException |ApiOpException |UnsupportedEncodingException e) {
@@ -339,8 +344,8 @@ public class MtGoodConntroller {
     }
 
 
-    @ApiOperation(value="retail/sku/sellStatus 批量更新售卖状态 下架",
-            notes="retail/sku/sellStatus 批量更新售卖状态 下架")
+    @ApiOperation(value="retail/sku/sellStatus 批量更新售卖状态 下架（线下）",
+            notes="retail/sku/sellStatus 批量更新售卖状态 下架（线下）")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "jsondata",
                     value = "{\n" +
@@ -373,10 +378,13 @@ public class MtGoodConntroller {
         try {
             Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);
             System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName()+"retail/sku/sellStatus 批量更新售卖状态 下架 ");
-            for (Object obj : maprequest.keySet()){
-                System.out.println("key为："+obj+"  值为："+maprequest.get(obj));
+            Map<String,String> new_map_String = new HashMap();
+            for(Object key:maprequest.keySet()){
+                new_map_String.put(key+"", String.valueOf(maprequest.get(key)));
+                System.out.println(key+" : "+String.valueOf(maprequest.get(key)));
+                System.out.println("key为："+key+"  值为："+String.valueOf(maprequest.get(key)));
             }
-            result=mtGoodService.GoodsSkusellStatusofflineS(maprequest,jsondata,
+            result=mtGoodService.GoodsSkusellStatusofflineS(new_map_String,jsondata,
                     "https://waimaiopen.meituan.com/api/v1/retail/sku/sellStatus",
                     "POST");
         } catch (ApiSysException |ApiOpException |UnsupportedEncodingException e) {

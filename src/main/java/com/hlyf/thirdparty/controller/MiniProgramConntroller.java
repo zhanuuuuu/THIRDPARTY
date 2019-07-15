@@ -58,6 +58,45 @@ public class MiniProgramConntroller {
         return result;
     }
 
+
+    @ApiOperation(value="根据code,appid，appsecret 获取openid", notes="根据code,appid，appsecret获取openid,或者获取unionid（如果用户有关注了该小程序同主体的公众号 ）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "code",
+                    value = "code",
+                    paramType ="query" ,required = true,dataType = "string",defaultValue = ""),
+            @ApiImplicitParam(name = "appid",
+                    value = "appid",
+                    paramType ="query" ,required = true,dataType = "string",defaultValue = ""),
+            @ApiImplicitParam(name = "appsecret",
+                    value = "appsecret",
+                    paramType ="query" ,required = true,dataType = "string",defaultValue = "")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful — 请求已完成",reference="77777",responseContainer="8888888"),
+            @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+            @ApiResponse(code = 403, message = "服务器拒绝请求"),
+            @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+            @ApiResponse(code = 404, message = "服务器找不到给定的资源；文档不存在"),
+            @ApiResponse(code = 500, message = "服务器不能完成请求")})
+    @RequestMapping(value = "api/wxuser/getOpenidOrUnionid", method = RequestMethod.POST)
+    @ResponseBody
+    public  String getOpenidOrUnionid(@RequestParam(value = "code",required = true) String code,
+                                      @RequestParam(value = "appid",required = true) String appid,
+                                      @RequestParam(value = "appsecret",required = true) String appsecret,
+                                  HttpServletRequest request){
+        String result="";
+        try {
+            result=this.miniService.GetOpenIOrUniuiddByCode(code,appid,appsecret);
+        } catch (Exception e) {
+            log.error(Thread.currentThread().getStackTrace()[1].getMethodName()+"出错了 api/sns/jscode2session :{}",e.getMessage());
+            e.printStackTrace();
+            return com.alibaba.fastjson.JSONObject.toJSONString(
+                    new ResultMsg(true, ""+ GlobalEumn.MINIPROGRAM_ERROR.getCode(),
+                            GlobalEumn.MINIPROGRAM_ERROR.getMesssage(), (ResultMsg) null));
+        }
+        return result;
+    }
+
     @ApiOperation(value="解密 根据session_key(通过上一步获取openid得到的,微信文档说五分钟过期),vi,encryptedData解密出来unionid或者用户手机号", notes="根据session_key,vi,encryptedData解密出来unionid或者用户手机号")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "encryptedData", value = "encryptedData", paramType ="query" ,required = true,dataType = "string"),
@@ -92,7 +131,7 @@ public class MiniProgramConntroller {
     @ApiOperation(value="小程序登录Login", notes="小程序登录Login")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "jsondata", value = "jsondata：示例{\n" +
-                    " \"sqltext\": \"loginStore\",  \n" +
+                    " \"sqltext\": \"门店传loginStore 总部传loginAdmin\",  \n" +
                     " \"appId\": \"4115\",\n" +
                     " \"appSecret\": \"f0b1b7d92d96485e704316604a24bd5a\",\n" +
                     " \"O2OChannelId\": \"1\",\n" +
@@ -129,6 +168,9 @@ public class MiniProgramConntroller {
         }
         return result;
     }
+
+
+
 
     @ApiOperation(value="小程序门店 点击门店获取门店信息 getStoreInfo", notes="小程序门店 点击门店获取门店信息getStoreInfo")
     @ApiImplicitParams({

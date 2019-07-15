@@ -8,6 +8,8 @@ import java.util.Map;
 public interface MiniService {
 
     String GetOpenIdByCode(String code);
+
+    String GetOpenIOrUniuiddByCode(String code,String appid,String appsecret);
     String Wxdecrypt(String encryptedData, String sessionKey, String iv);
     String WxLogin(Map map, String jsonData);
     String WxStoreInfo(Map map, String jsonData);

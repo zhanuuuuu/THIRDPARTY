@@ -30,7 +30,7 @@ public class StoreGoodsInfo {
     private String CostPrice;
     private String min_order_count;
     private String unit;
-    private String sepc;
+    private String spec;
     private String box_num;
     private String box_price;
     private String GoodsGroupId;
@@ -38,5 +38,4 @@ public class StoreGoodsInfo {
     private String Status;
     private String ImageUrl;
     private String stock;
-
 }
