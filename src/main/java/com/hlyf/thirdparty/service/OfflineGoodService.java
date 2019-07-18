@@ -27,5 +27,12 @@ public interface OfflineGoodService {
     String GetGoodsCategories(Map map, String data, String url, String method) throws ApiSysException,
             ApiOpException, UnsupportedEncodingException;
 
+    String GetGoodsselChangeStoreGoodsPriceLogs(Map map, String data, String url, String method)
+            throws ApiSysException, ApiOpException, UnsupportedEncodingException;
+
+
+
+
+
 
 }

@@ -174,9 +174,8 @@ public class OfflineGoodConntroller {
             System.out.println("创建商品 模糊匹配");
             Map<String,String> new_map_String = new HashMap();
             for(Object key:maprequest.keySet()){
-                new_map_String.put(key+"", String.valueOf(maprequest.get(key)));
+                new_map_String.put(key+"", String.valueOf(maprequest.get(key)==null? "":maprequest.get(key)));
                 System.out.println(key+" : "+String.valueOf(maprequest.get(key)));
-                System.out.println("key为："+key+"  值为："+String.valueOf(maprequest.get(key)));
             }
             result=this.offlineGoodService.AddVirtualShopGoods(new_map_String,jsondata,
                     "https://waimaiopen.meituan.com/api/v1/retail/initdata",
@@ -234,7 +233,7 @@ public class OfflineGoodConntroller {
         return result;
     }
 
-    @ApiOperation(value="得到商品分类 （线下）", notes="得到商品分类 （线下）")
+    @ApiOperation(value="得到商品分类 （线下）GetGoodsCategories", notes="得到商品分类 （线下）GetGoodsCategories")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "jsondata", value = "{\n" +
                     "\t\"sqltext\": \"GetGoodsCategories\",\n" +
@@ -263,6 +262,52 @@ public class OfflineGoodConntroller {
                 System.out.println("key为："+obj+"  值为："+maprequest.get(obj));
             }
             result=this.offlineGoodService.GetGoodsCategories(maprequest,jsondata,
+                    "",
+                    "");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return com.alibaba.fastjson.JSONObject.toJSONString(
+                    new ResultMsg(true, ""+ GlobalEumn.PARAMETERS_ERROR.getCode(),
+                            GlobalEumn.PARAMETERS_ERROR.getMesssage(), ""));
+        }
+        return result;
+    }
+
+    @ApiOperation(value="小程序门店 查询门店调价记录selChangeStoreGoodsPriceLog", notes="小程序门店 " +
+            " 查询门店调价记录 selChangeStoreGoodsPriceLog  " +
+            " in:(virtualshopid:虚拟门店编号\tphone:手机号 GoodsInfo:模糊查询（可以商品ID，商品名称）)\n" +
+            " out:(result：1,GoodsId:商品编号,goodsName:商品名称,ObtainedPrice:调整前价格，newPrice：调整后价格,UpdateTime:调整时间,context:备注")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "jsondata", value = "{\n" +
+                    "\t\"sqltext\": \"selChangeStoreGoodsPriceLog\",\n" +
+                    "\t\"appId\": \"4115\",\n" +
+                    "\t\"appSecret\": \"f0b1b7d92d96485e704316604a24bd5a\",\n" +
+                    "\t\"virtualshopid\": \"虚拟门店编号\",\n" +
+                    "\t\"phone\": \"手机号\",\n" +
+                    "\t\"GoodsInfo\": \"模糊查询（可以商品ID，商品名称）\",\n" +
+                    "\t\"O2OChannelId\": \"1\"\n" +
+                    "}",paramType ="query" ,required = true,dataType = "string",defaultValue = "4115"),
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful — 请求已完成",reference="77777",responseContainer="8888888"),
+            @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+            @ApiResponse(code = 403, message = "服务器拒绝请求"),
+            @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+            @ApiResponse(code = 404, message = "服务器找不到给定的资源；文档不存在"),
+            @ApiResponse(code = 500, message = "服务器不能完成请求")})
+    @RequestMapping(value = "api/offline/poi/GetselChangeStoreGoodsPriceLog", method = RequestMethod.POST)
+    @ResponseBody
+    public  String GetGoodsselChangeStoreGoodsPriceLog(@RequestParam(value = "jsondata",required = true) String jsondata,
+                                      HttpServletRequest request){
+        String result="";
+        try {
+            //第三种方式
+            Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);
+            System.out.println("查询商品 模糊匹配");
+            for (Object obj : maprequest.keySet()){
+                System.out.println("key为："+obj+"  值为："+maprequest.get(obj));
+            }
+            result=this.offlineGoodService.GetGoodsselChangeStoreGoodsPriceLogs(maprequest,jsondata,
                     "",
                     "");
         } catch (Exception e) {

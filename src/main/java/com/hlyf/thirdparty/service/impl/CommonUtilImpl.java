@@ -8,6 +8,7 @@ import com.hlyf.thirdparty.result.ResultMsg;
 import com.hlyf.thirdparty.tool.MapRemoveNullUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -116,5 +117,25 @@ public class CommonUtilImpl {
                     new ResultMsg(true, GlobalEumn.PARAMETERS_ERROR.getCode()+"",GlobalEumn.PARAMETERS_ERROR.getMesssage(),resultString));
         }
         return resultString;
+    }
+
+    public static String getSelResultComm(String data, meituanDao mtDao,String urlTitle) {
+        try{
+            List<RepResult> repResult= mtDao.ExecProceGetDataList(data);
+            if(repResult!=null && repResult.size()>0 && repResult.get(0).getResult().equals("1")){
+                return JSONObject.toJSONString(
+                        new ResultMsg(true, GlobalEumn.SUCCESS.getCode()+"",
+                                GlobalEumn.SUCCESS.getMesssage(),repResult));
+            }else {
+                return JSONObject.toJSONString(
+                        new ResultMsg(true, GlobalEumn.MINIPROGRAM_EMPTY.getCode()+"",
+                                GlobalEumn.MINIPROGRAM_EMPTY.getMesssage(),""));
+            }
+        }catch (Exception e){
+            log.error(Thread.currentThread().getStackTrace()[1].getMethodName() +urlTitle+" 调用我们的过程出错了 {}",e.getMessage());
+            return JSONObject.toJSONString(
+                    new ResultMsg(true, GlobalEumn.SYSTEM_ERROR.getCode()+"",
+                            GlobalEumn.SYSTEM_ERROR.getMesssage(),""));
+        }
     }
 }

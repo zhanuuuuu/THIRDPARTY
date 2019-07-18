@@ -290,8 +290,8 @@ public class MeituanAllController {
                 com.alibaba.fastjson.JSONObject.toJSONString(
                 new ResultMsg(true, ""+ GlobalEumn.IMAGESJSON_ERROR.getCode(),
                         GlobalEumn.IMAGESJSON_ERROR.getMesssage(), ""))
-                : StringEscapeUtils.unescapeJavaScript(com.alibaba.fastjson.JSONObject.toJSONString(
+                : com.alibaba.fastjson.JSONObject.toJSONString(
                 new ResultMsg(true, ""+ GlobalEumn.SUCCESS.getCode(),
-                        GlobalEumn.SUCCESS.getMesssage(), com.alibaba.fastjson.JSONObject.toJSONString(urlImages))));
+                        GlobalEumn.SUCCESS.getMesssage(), com.alibaba.fastjson.JSONObject.toJSONString(urlImages)));
     }
 }

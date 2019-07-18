@@ -26,4 +26,7 @@ public class LoginResult {
    private String o2ochannelName;
    private String virtualshopid;
    private String virtualshopName;
+
+
+
 }

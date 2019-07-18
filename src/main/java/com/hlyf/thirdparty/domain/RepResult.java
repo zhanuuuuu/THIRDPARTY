@@ -26,4 +26,16 @@ public class RepResult {
     private String GoodsGroupId;
     private String  GoodsGroupName;
 
+    /**
+     * 小程序门店
+     * 查询门店调价记录
+     * selChangeStoreGoodsPriceLog
+     */
+    private String goodsName;
+    private String VirtualShopId;
+    private String ObtainedPrice;
+    //private String newPrice;
+    private String UpdateTime;
+    private String context;
+
 }

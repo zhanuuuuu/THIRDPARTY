@@ -60,7 +60,6 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
         }
     }
 
-
     @Override
     public String CheckVirtualShopGoodsPrice(Map map, String data, String url, String method) throws ApiSysException,
             ApiOpException, UnsupportedEncodingException {
@@ -124,13 +123,10 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
                 try{
                     Map preMap=map;
                     preMap.put("sqltext",sqltextback);
-
                     RepResult repResult=this.MtDao.ExecProceGetData(data);
                     if(repResult!=null && repResult.getResult().equals("1")){
-
-
                         //这里符合我们上架规则才可以上架
-                        Map<String,Object> parmsMapTrue=new HashMap<String,Object>();
+                        Map<String,String> parmsMapTrue=new HashMap<String,String>();
                         String skus="[{\n" +
                                 "\t\"sku_id\": \""+preMap.get("sku_id")+"\",\n" +
                                 "\t\"spec\": \""+preMap.get("spec")+"\",\n" +
@@ -144,7 +140,7 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
                         parmsMapTrue.put("app_food_code",repResult.getGoodsid());
                         parmsMapTrue.put("name",(String)preMap.get("Name"));
                         parmsMapTrue.put("description",(String)preMap.get("Description"));
-                        parmsMapTrue.put("category_code",(String)preMap.get("goodsGroupId"));
+                        parmsMapTrue.put("category_name",(String)preMap.get("goodsGroupId"));
                         parmsMapTrue.put("skus",skus.replaceAll("\\s","").replaceAll("\\n",""));
                         parmsMapTrue.put("price",Float.valueOf(repResult.getMtprice())+"");
                         parmsMapTrue.put("min_order_count",(String)preMap.get("min_order_count"));
@@ -152,11 +148,21 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
                         parmsMapTrue.put("is_sold_out",(String)preMap.get("is_sold_out"));
                         parmsMapTrue.put("picture",(String)preMap.get("ImageUrl"));
 
-                        String parmsMapTrueString= JSON.toJSONString(parmsMapTrue);
 
+                        String parmsMapTrueString= JSON.toJSONString(parmsMapTrue);
                         System.out.println(parmsMapTrueString);
-                        resultString = URLFactoryByZ.requestApi(method,
-                                url, systemParamsMap, parmsMapTrue);
+
+                        try{
+                            resultString = URLFactoryByZ.requestApi(method,
+                                    url, systemParamsMap, parmsMapTrue);
+                        }catch (Exception e){
+                            log.info("访问美团出错了 ： {} ",e.getMessage());
+                            e.printStackTrace();
+                            return JSONObject.toJSONString(
+                                    new ResultMsg(true, GlobalEumn.SUCCESS_ERRORTOW.getCode()+"",
+                                            GlobalEumn.SUCCESS_ERRORTOW.getMesssage(),resultString));
+                        }
+
                         preMap.put("goodsid",repResult.getGoodsid());
                         String afterMapdata= JSON.toJSONString(preMap);
                         log.info("商品新增 转出来的json格式 看下格式 ： {} ",afterMapdata);
@@ -201,7 +207,6 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
 //
 //                    resultString = URLFactoryByZ.requestApi(method,
 //                            url, systemParamsMap, parmsMapTrue);
-//
 //                    resultString=CommonUtilImpl.CommExe(resultString,afterMapdata,MtDao);
                 }catch (Exception e){
                     e.printStackTrace();
@@ -292,29 +297,31 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
         Integer type=Integer.valueOf((String) map.get("O2OChannelId"));
         switch (type){
             case 1://美团
-                try{
-                    List<RepResult> repResult=this.MtDao.ExecProceGetDataList(data);
-                    if(repResult!=null && repResult.size()>0 && repResult.get(0).getResult().equals("1")){
-                        return JSONObject.toJSONString(
-                                new ResultMsg(true, GlobalEumn.SUCCESS.getCode()+"",
-                                        GlobalEumn.SUCCESS.getMesssage(),repResult));
-                    }else {
-                        return JSONObject.toJSONString(
-                                new ResultMsg(true, GlobalEumn.MINIPROGRAM_EMPTY.getCode()+"",
-                                        GlobalEumn.MINIPROGRAM_EMPTY.getMesssage(),""));
-                    }
-                }catch (Exception e){
-                    log.error("得到商品分类 调用我们的过程出错了 {}",e.getMessage());
-                    return JSONObject.toJSONString(
-                            new ResultMsg(true, GlobalEumn.SYSTEM_ERROR.getCode()+"",
-                                    GlobalEumn.SYSTEM_ERROR.getMesssage(),""));
-                }
+                return CommonUtilImpl.getSelResultComm(data, this.MtDao,"得到商品分类 （线下）GetGoodsCategories");
             default:
                 log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);
                 break;
         }
         return resultString;
     }
+
+
+    @Override
+    public String GetGoodsselChangeStoreGoodsPriceLogs(Map map, String data, String url, String method)
+            throws ApiSysException, ApiOpException, UnsupportedEncodingException {
+        String resultString="";
+        Integer type=Integer.valueOf((String) map.get("O2OChannelId"));
+        switch (type){
+            case 1://美团
+                return CommonUtilImpl.getSelResultComm(data, MtDao,"小程序门店 查询门店调价记录selChangeStoreGoodsPriceLog");
+            default:
+                log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);
+                break;
+        }
+        return resultString;
+    }
+
+
 
 
 }

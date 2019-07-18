@@ -138,7 +138,6 @@ public class URLFactoryByZ {
                 urlPrefix = "http://127.0.0.1:9000/api/v1/";
             }
         }
-
         env = urlPrefix + (String)urlMap.get(methodName);
         return env;
     }
@@ -204,7 +203,7 @@ public class URLFactoryByZ {
             Object key = arr$[i$];
             if(!key.equals("appSecret")) {
                 String val = (String)params2.get(key);
-                str = str + "&" + key + "=" + URLDecoder.decode(val, "UTF-8");
+                str = str + "&" + key + "=" + URLDecoder.decode(val, "utf-8");
             }
         }
 
