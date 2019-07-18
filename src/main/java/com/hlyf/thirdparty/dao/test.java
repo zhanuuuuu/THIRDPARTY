@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,6 +15,20 @@ import java.util.Map;
  */
 public class test {
     public static void main(String[] args) {
+
+        List<String> list=new ArrayList<>();
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
+
+        for(int i=0;i<list.size();i++){
+            System.out.println(i);
+            System.out.println(list.get(i));
+        }
+        System.out.println("结束");
 
         String str="{\n" +
                 "  \"data\": [\n" +
@@ -61,12 +77,11 @@ public class test {
                     Map<String,Object> maprequest = JSON.parseObject(jsonArray.getJSONObject(0).toJSONString(),Map.class);
                     Map<String,String> new_map_String = new HashMap();
                     for(Object key:maprequest.keySet()){
-                        //new_map_String.put(key+"", String.valueOf(maprequest.get(key)==null? "":maprequest.get(key)));
+                        new_map_String.put(key+"", String.valueOf(maprequest.get(key)==null? "":maprequest.get(key)));
                         System.out.println(key+" : "+String.valueOf(maprequest.get(key)==null? "":maprequest.get(key)));
                     }
 
-
-                    String s1=JSON.toJSONString(maprequest, SerializerFeature.WriteNullListAsEmpty,
+                    String s1=JSON.toJSONString(new_map_String, SerializerFeature.WriteNullListAsEmpty,
                             SerializerFeature.WriteNullStringAsEmpty,
                             SerializerFeature.WriteNullBooleanAsFalse,
                             SerializerFeature.WriteMapNullValue,
@@ -74,6 +89,8 @@ public class test {
                     System.out.println(""+s1);
                 }
             }
+
+            System.out.println(String.valueOf(0));
             System.out.println(""+null);
             System.out.println(String.valueOf("").equals(""));
 

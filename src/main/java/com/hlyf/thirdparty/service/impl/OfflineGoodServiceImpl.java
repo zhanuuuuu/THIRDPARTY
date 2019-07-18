@@ -147,15 +147,13 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
                         parmsMapTrue.put("unit",(String)preMap.get("Unit"));
                         parmsMapTrue.put("is_sold_out",(String)preMap.get("is_sold_out"));
                         parmsMapTrue.put("picture",(String)preMap.get("ImageUrl"));
-
-
                         String parmsMapTrueString= JSON.toJSONString(parmsMapTrue);
                         System.out.println(parmsMapTrueString);
-
                         try{
+                            //这里可能会发生异常
                             resultString = URLFactoryByZ.requestApi(method,
                                     url, systemParamsMap, parmsMapTrue);
-                        }catch (Exception e){
+                        }catch (ApiSysException|ApiOpException|UnsupportedEncodingException e){
                             log.info("访问美团出错了 ： {} ",e.getMessage());
                             e.printStackTrace();
                             return JSONObject.toJSONString(
@@ -166,48 +164,12 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
                         preMap.put("goodsid",repResult.getGoodsid());
                         String afterMapdata= JSON.toJSONString(preMap);
                         log.info("商品新增 转出来的json格式 看下格式 ： {} ",afterMapdata);
-
                         resultString=CommonUtilImpl.CommExe(resultString,afterMapdata,MtDao);
                     }else {
                         return JSONObject.toJSONString(
                                 new ResultMsg(true, GlobalEumn.MINIPROGRAM_ADDGOOD.getCode()+"",
                                         GlobalEumn.MINIPROGRAM_ADDGOOD.getMesssage(),""));
                     }
-
-//                    String afterMapdata= JSON.toJSONString(preMap);
-//                    log.info("商品新增 转出来的json格式 看下格式 ： {} ",afterMapdata);
-//                    //这里符合我们上架规则才可以上架
-//                    Map<String,Object> parmsMapTrue=new HashMap<String,Object>();
-//                    String skus="[{\n" +
-//                            "\t\"sku_id\": \""+preMap.get("sku_id")+"\",\n" +
-//                            "\t\"spec\": \""+preMap.get("spec")+"\",\n" +
-//                            "\t\"price\": \""+20+"\",\n" +
-//                            "\t\"stock\": \""+preMap.get("stock")+"\",\n" +
-//                            "\t\"box_num\": \""+preMap.get("box_num")+"\",\n" +
-//                            "\t\"box_price\": \""+preMap.get("box_price")+"\"\n" +
-//                            "}]";
-//                    parmsMapTrue.put("app_poi_code",(String)preMap.get("virtualshopid"));
-//                    parmsMapTrue.put("operate_type",1+"");
-//                    parmsMapTrue.put("app_food_code",(String)preMap.get("goodsid"));
-//                    parmsMapTrue.put("name",(String)preMap.get("Name"));
-//                    parmsMapTrue.put("description",(String)preMap.get("Description"));
-//                    parmsMapTrue.put("category_code",(String)preMap.get("goodsGroupId"));
-//                    parmsMapTrue.put("skus",skus.replaceAll("\\s","").replaceAll("\\n",""));
-//                    parmsMapTrue.put("price",20+"");
-//                    parmsMapTrue.put("min_order_count",(String)preMap.get("min_order_count"));
-//                    parmsMapTrue.put("unit",(String)preMap.get("Unit"));
-//                    parmsMapTrue.put("is_sold_out",(String)preMap.get("is_sold_out"));
-//                    parmsMapTrue.put("picture",(String)preMap.get("ImageUrl"));
-//
-//                    String parmsMapTrueString= JSON.toJSONString(parmsMapTrue);
-//
-//                    System.out.println("看这里：  "+parmsMapTrueString);
-//
-//                    //MapRemoveNullUtil.removeNullValue(parmsMapTrue);
-//
-//                    resultString = URLFactoryByZ.requestApi(method,
-//                            url, systemParamsMap, parmsMapTrue);
-//                    resultString=CommonUtilImpl.CommExe(resultString,afterMapdata,MtDao);
                 }catch (Exception e){
                     e.printStackTrace();
                     log.error("新增商品 调用我们的过程出错了 {}",e.getMessage());

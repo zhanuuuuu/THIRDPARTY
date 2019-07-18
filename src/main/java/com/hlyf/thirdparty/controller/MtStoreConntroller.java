@@ -425,14 +425,15 @@ public class MtStoreConntroller {
 
 
     //线下商品同步
-    @ApiOperation(value="小程序总部 点击同步门店 SyncShop 线下", notes="小程序总部 点击同步门店 线下")
+    @ApiOperation(value="小程序总部 点击同步门店 SyncShop （线下）", notes="小程序总部 点击同步门店 线下  示例：" +
+            "" )
     @ApiImplicitParams({
             @ApiImplicitParam(name = "jsondata", value = "{\n" +
                     "\t\"sqltext\": \"SyncShop\",\n" +
                     "\t\"appId\": \"4115\",\n" +
                     "\t\"appSecret\": \"f0b1b7d92d96485e704316604a24bd5a\",\n" +
                     "\t\"O2OChannelId\": \"1\",\n" +
-                    "\t\"app_poi_code\": \"\"\n" +
+                    "\t\"app_poi_codes\": \"美团门店号 APP方门店id(半角逗号分隔)\"\n" +
                     "}",paramType ="query" ,required = true,dataType = "string",defaultValue = "4115"),
     })
     @ApiResponses({
@@ -447,7 +448,6 @@ public class MtStoreConntroller {
     public  String poiSyncShop(@RequestParam(value = "jsondata",required = true) String jsondata,
                             HttpServletRequest request){
         String result="";
-
         try {
             //第三种方式
             Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);

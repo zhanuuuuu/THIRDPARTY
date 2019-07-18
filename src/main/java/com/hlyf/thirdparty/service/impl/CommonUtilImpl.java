@@ -1,6 +1,9 @@
 package com.hlyf.thirdparty.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.hlyf.thirdparty.dao.miniprogram.meituanDao;
 import com.hlyf.thirdparty.domain.RepResult;
 import com.hlyf.thirdparty.result.GlobalEumn;
@@ -8,6 +11,7 @@ import com.hlyf.thirdparty.result.ResultMsg;
 import com.hlyf.thirdparty.tool.MapRemoveNullUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -118,6 +122,77 @@ public class CommonUtilImpl {
         }
         return resultString;
     }
+
+    /**
+     *
+     * @param resultString
+     * @param data
+     * @param MtDao
+     * @param preMap
+     * @return
+     */
+    public static String CommSySn(String resultString, String data, meituanDao MtDao,Map<String,String> preMap){
+
+        String result="{";
+        log.info("我是拿到的返回值  :{}",resultString);
+        if(!resultString.equals("")){
+            JSONObject jsonObject=JSONObject.parseObject(resultString);
+            if(jsonObject.containsKey("data") && !jsonObject.containsKey("error")){
+                JSONArray jsonArray=jsonObject.getJSONArray("data");
+                if(jsonArray.size()>0){
+                    for(int i=0;i<jsonArray.size();i++){
+                        System.out.println(jsonArray.getJSONObject(i).get("pic_url_large"));
+
+                        result=result+"门店 "+jsonArray.getJSONObject(i).get("name");
+                        Map<String,Object> maprequest = JSON.parseObject(jsonArray.getJSONObject(i).toJSONString(),Map.class);
+                        Map<String,String> new_map_String = new HashMap();
+                        //添加原始数据
+                        for(Object key:preMap.keySet()){
+                            new_map_String.put(key+"", String.valueOf(preMap.get(key)==null? "":preMap.get(key)));
+                        }
+                        //添加访问请取回来的数据
+                        for(Object key:maprequest.keySet()){
+                            new_map_String.put(key+"", String.valueOf(maprequest.get(key)==null? "":maprequest.get(key)));
+                        }
+                        String callJsonText=JSON.toJSONString(new_map_String,
+                                SerializerFeature.WriteNullStringAsEmpty,
+                                SerializerFeature.WriteNullBooleanAsFalse);
+                        log.info("我是循环访问接口的数据  :{}",callJsonText);
+                        try{
+                            RepResult repResult=MtDao.ExecProceGetData(callJsonText);
+                            if(repResult!=null && repResult.getResult().equals("1")){
+                                result=result+"同步成功,";
+                            }else{
+                                result=result+"同步失败,";
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            result=result+"同步失败,";
+                        }
+                    }
+                    //遍历访问结束
+                    result=result+"}";
+                    resultString=JSONObject.toJSONString(
+                            new ResultMsg(true, GlobalEumn.SUCCESS.getCode()+"",result,resultString));
+
+                }else{
+                    resultString=JSONObject.toJSONString(
+                            new ResultMsg(true, GlobalEumn.NO_STORE_SYSN.getCode()+"",GlobalEumn.NO_STORE_SYSN.getMesssage(),resultString));
+                }
+
+
+            }else {
+                resultString=JSONObject.toJSONString(
+                        new ResultMsg(true, GlobalEumn.PARAMETERS_ERROR.getCode()+"",GlobalEumn.PARAMETERS_ERROR.getMesssage(),resultString));
+            }
+        }else {
+            resultString=JSONObject.toJSONString(
+                    new ResultMsg(true, GlobalEumn.PARAMETERS_ERROR.getCode()+"",GlobalEumn.PARAMETERS_ERROR.getMesssage(),resultString));
+        }
+
+        return resultString;
+    }
+
 
     public static String getSelResultComm(String data, meituanDao mtDao,String urlTitle) {
         try{

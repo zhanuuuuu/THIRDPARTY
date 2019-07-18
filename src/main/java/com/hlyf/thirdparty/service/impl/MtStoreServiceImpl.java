@@ -89,20 +89,22 @@ public class MtStoreServiceImpl implements MtStoreService {
                 Map systemParamsMap = URLFactoryByZ.getsystemParamsMap((String) map.get("appId"), (String) map.get("appSecret"));
                 try{
                     Map preMap=map;
-
-
                     String afterMapdata= JSON.toJSONString(preMap);
                     log.info("同步门店 转出来的json格式 看下格式 ： {} ",afterMapdata);
                     Map<String,String> parmsMapTrue=new HashMap<String,String>();
-                    parmsMapTrue.put("app_poi_code",(String)preMap.get("virtualshopid"));
+                    parmsMapTrue.put("app_poi_codes",(String)preMap.get("app_poi_codes"));
+                    try{
+                        //这里可能会发生异常
+                        resultString = URLFactoryByZ.requestApi(method,
+                                url, systemParamsMap, parmsMapTrue);
+                    }catch (ApiSysException|ApiOpException|UnsupportedEncodingException e){
+                        log.info("访问美团出错了 ： {} ",e.getMessage());
+                        e.printStackTrace();
+                        return JSONObject.toJSONString(
+                                new ResultMsg(true, GlobalEumn.SUCCESS_ERRORTOW.getCode()+"",
+                                        GlobalEumn.SUCCESS_ERRORTOW.getMesssage(),resultString));
+                    }
 
-                    String sku="[{\"app_food_code\":\""+(String)preMap.get("goodsId")+"\"," +
-                            "\"skus\":[{\"sku_id\":\""+(String)preMap.get("sku_id")+"\",\"stock\":\""+(String)preMap.get("stock")+"\"}]}]";
-                    parmsMapTrue.put("food_data",
-                            sku.replaceAll("\\s","").replaceAll("\\n","")
-                    );
-                    resultString = URLFactoryByZ.requestApi(method,
-                            url, systemParamsMap, parmsMapTrue);
                     resultString=CommonUtilImpl.CommExe(resultString,afterMapdata,MtDao);
                 }catch (Exception e){
                     log.error("同步门店 调用我们的过程出错了 {}",e.getMessage());
