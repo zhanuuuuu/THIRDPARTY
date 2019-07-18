@@ -24,5 +24,25 @@
     </select>
 
 
+    <!--小程序总部 查询临时门店seltempShop-->
+    <select id="GetTempShop" parameterType="java.lang.String" resultType="com.hlyf.thirdparty.domain.TempShop">
+        <![CDATA[
+        		{call p_hpCallJsonToSql_w(
+        					#{callJsonText,mode=IN,jdbcType=VARCHAR}
+        					)
+        		}
+    	]]>
+    </select>
+
+    <select id="GetShop" parameterType="java.lang.String" resultType="com.hlyf.thirdparty.domain.Shop">
+        <![CDATA[
+        		{call p_hpCallJsonToSql_w(
+        					#{callJsonText,mode=IN,jdbcType=VARCHAR}
+        					)
+        		}
+    	]]>
+    </select>
+
+
 
 </mapper>

@@ -23,6 +23,12 @@ public interface MtService {
     String getpushS(HttpServletRequest request,String appSecret,String sig,String urlType) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
 
     String poisaveS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
+
+    String CreateShopS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
+    String EditVirtualShopS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
+
+    String seltempShopS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
+    String GetVirtualShopS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
     String poiOpenS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
     String poicloseS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
 

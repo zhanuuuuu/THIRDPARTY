@@ -1,8 +1,13 @@
 package com.hlyf.thirdparty.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hlyf.thirdparty.config.MtpushConfig;
+import com.hlyf.thirdparty.dao.miniprogram.MtStoreDao;
 import com.hlyf.thirdparty.dao.miniprogram.meituanDao;
+import com.hlyf.thirdparty.domain.RepResult;
+import com.hlyf.thirdparty.domain.Shop;
+import com.hlyf.thirdparty.domain.TempShop;
 import com.hlyf.thirdparty.mertuanoverwrite.SignGeneratorByZ;
 import com.hlyf.thirdparty.mertuanoverwrite.URLFactoryByZ;
 import com.hlyf.thirdparty.result.GlobalEumn;
@@ -63,6 +68,9 @@ public class MtServiceImp implements MtService,MtpushConfig {
 
     @Autowired
     private meituanDao MtDao;
+
+    @Autowired
+    private MtStoreDao mtStoreDao;
     /**
      *
      * @param appId
@@ -180,6 +188,116 @@ public class MtServiceImp implements MtService,MtpushConfig {
 
         return resultString;
 
+    }
+    @Override
+    public String CreateShopS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
+
+        String resultString="";
+        Integer type=Integer.valueOf((String) map.get("O2OChannelId"));
+        switch (type){
+            case 1://美团
+                log.info("原始数据 {} ",data);
+                String dataTrue= JSON.toJSONString(map);
+                log.info("转换出来的请求过程的数据 {} ",dataTrue);
+                resultString=CommonUtilImpl.CommExecProce(dataTrue,this.MtDao,"创建门店接口(线下)");
+                break;
+            default:
+                log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);
+                break;
+        }
+        return resultString;
+
+    }
+
+
+    @Override
+    public String EditVirtualShopS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
+
+        String resultString="";
+        Integer type=Integer.valueOf((String) map.get("O2OChannelId"));
+        switch (type){
+            case 1://美团
+                log.info("原始数据 {} ",data);
+                String dataTrue= JSON.toJSONString(map);
+                log.info("转换出来的请求过程的数据 {} ",dataTrue);
+                resultString=CommonUtilImpl.CommExecProce(dataTrue,this.MtDao,"小程序总部 修改门店(线下)");
+                break;
+            default:
+                log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);
+                break;
+        }
+        return resultString;
+
+    }
+
+    @Override
+    public String seltempShopS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
+
+        String resultString="";
+        Integer type=Integer.valueOf((String) map.get("O2OChannelId"));
+        switch (type){
+            case 1://美团
+                log.info("原始数据 {} ",data);
+
+                try{
+                    List<TempShop> repResult= mtStoreDao.GetTempShop(data);
+                    if(repResult!=null && repResult.size()>0 ){
+                        resultString= JSONObject.toJSONString(
+                                new ResultMsg(true, GlobalEumn.SUCCESS.getCode()+"",
+                                        GlobalEumn.SUCCESS.getMesssage(),repResult));
+                    }else {
+                        resultString= JSONObject.toJSONString(
+                                new ResultMsg(true, GlobalEumn.MINIPROGRAM_EMPTY.getCode()+"",
+                                        GlobalEumn.MINIPROGRAM_EMPTY.getMesssage(),""));
+                    }
+                }catch (Exception e){
+                    log.error(Thread.currentThread().getStackTrace()[1].getMethodName() +" 调用我们的过程出错了 {}",e.getMessage());
+                    resultString= JSONObject.toJSONString(
+                            new ResultMsg(true, GlobalEumn.SYSTEM_ERROR.getCode()+"",
+                                    GlobalEumn.SYSTEM_ERROR.getMesssage(),""));
+                }
+
+                break;
+            default:
+                log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);
+                break;
+        }
+        return resultString;
+
+    }
+
+    @Override
+    public String GetVirtualShopS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
+
+        String resultString="";
+        Integer type=Integer.valueOf((String) map.get("O2OChannelId"));
+        switch (type){
+            case 1://美团
+                log.info("原始数据 {} ",data);
+                try{
+                    List<Shop> repResult= mtStoreDao.GetShop(data);
+                    if(repResult!=null && repResult.size()>0 ){
+                        resultString= JSONObject.toJSONString(
+                                new ResultMsg(true, GlobalEumn.SUCCESS.getCode()+"",
+                                        GlobalEumn.SUCCESS.getMesssage(),repResult));
+                    }else {
+                        resultString= JSONObject.toJSONString(
+                                new ResultMsg(true, GlobalEumn.MINIPROGRAM_EMPTY.getCode()+"",
+                                        GlobalEumn.MINIPROGRAM_EMPTY.getMesssage(),""));
+                    }
+                }catch (Exception e){
+                    log.error(Thread.currentThread().getStackTrace()[1].getMethodName() +" 小程序总部 获取门店信息准备修改GetVirtualShop 出错了 {}",e.getMessage());
+                    resultString= JSONObject.toJSONString(
+                            new ResultMsg(true, GlobalEumn.SYSTEM_ERROR.getCode()+"",
+                                    GlobalEumn.SYSTEM_ERROR.getMesssage(),""));
+                }
+
+                break;
+            default:
+                log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);
+                break;
+        }
+        return resultString;
 
     }
 
@@ -192,6 +310,8 @@ public class MtServiceImp implements MtService,MtpushConfig {
 
         return map;
     }
+
+
 
     private String MyExecProce(String resultString,String data){
         log.info("我是拿到的返回值  :{}",resultString);

@@ -105,7 +105,7 @@ public class MtStoreServiceImpl implements MtStoreService {
                                         GlobalEumn.SUCCESS_ERRORTOW.getMesssage(),resultString));
                     }
 
-                    resultString=CommonUtilImpl.CommExe(resultString,afterMapdata,MtDao);
+                    resultString=CommonUtilImpl.CommSySn(resultString,afterMapdata,MtDao,preMap);
                 }catch (Exception e){
                     log.error("同步门店 调用我们的过程出错了 {}",e.getMessage());
                     return JSONObject.toJSONString(

@@ -163,11 +163,11 @@ public class CommonUtilImpl {
                             if(repResult!=null && repResult.getResult().equals("1")){
                                 result=result+"同步成功,";
                             }else{
-                                result=result+"同步失败,";
+                                result=result+"同步失败或线下不存在该门店,";
                             }
                         }catch (Exception e){
                             e.printStackTrace();
-                            result=result+"同步失败,";
+                            result=result+"（调用过程异常）同步失败或线下不存在该门店,";
                         }
                     }
                     //遍历访问结束
@@ -189,7 +189,6 @@ public class CommonUtilImpl {
             resultString=JSONObject.toJSONString(
                     new ResultMsg(true, GlobalEumn.PARAMETERS_ERROR.getCode()+"",GlobalEumn.PARAMETERS_ERROR.getMesssage(),resultString));
         }
-
         return resultString;
     }
 
@@ -211,6 +210,27 @@ public class CommonUtilImpl {
             return JSONObject.toJSONString(
                     new ResultMsg(true, GlobalEumn.SYSTEM_ERROR.getCode()+"",
                             GlobalEumn.SYSTEM_ERROR.getMesssage(),""));
+        }
+    }
+
+
+    public static String CommExecProce(String data, meituanDao mtDao,String urlTitle) {
+        try{
+            RepResult repResult= mtDao.ExecProceGetData(data);
+            if(repResult!=null &&  repResult.getResult().equals("1")){
+                return JSONObject.toJSONString(
+                        new ResultMsg(true, GlobalEumn.SUCCESS.getCode()+"",
+                                GlobalEumn.SUCCESS.getMesssage(),repResult));
+            }else {
+                return JSONObject.toJSONString(
+                        new ResultMsg(true, GlobalEumn.PROCE_ERROR.getCode()+"",
+                                GlobalEumn.PROCE_ERROR.getMesssage(),""));
+            }
+        }catch (Exception e){
+            log.error(Thread.currentThread().getStackTrace()[1].getMethodName() +urlTitle+" 调用我们的过程出错了 {}",e.getMessage());
+            return JSONObject.toJSONString(
+                    new ResultMsg(true, GlobalEumn.PROCE_ERROR.getCode()+"",
+                            GlobalEumn.PROCE_ERROR.getMesssage(),""));
         }
     }
 }

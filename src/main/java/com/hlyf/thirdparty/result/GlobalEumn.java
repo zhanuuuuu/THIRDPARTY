@@ -13,6 +13,7 @@ public enum  GlobalEumn implements GlobalInfo {
     SUCCESS_ERROR(1009, "访问接口成功,但是执行保存我们的脚本失败了"),
     SUCCESS_ERRORTOW(1010, "访问美团接口失败了"),
     NO_STORE_SYSN(1011, "没有获取大需要同步的数据"),
+    PROCE_ERROR(1012, "调用过程返回失败"),
     //小程序相关封装
     MINIPROGRAM_ERROR(2001,"访问小程序接口出错,请检查后台参数配置或者前台上传的参数是否正确"),
     MINIPROGRAM_DECRYPT(2002,"session_key过期,解密失败,或者上传的参数有误"),
