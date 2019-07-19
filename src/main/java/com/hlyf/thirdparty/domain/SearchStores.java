@@ -16,8 +16,8 @@ import lombok.experimental.Accessors;
 @ToString
 public class SearchStores {
     private String  result;
-    private String  shopid;
-    private String  shopName;
+    private String  virtualshopid;
+    private String  virtualshopName;
     private String  o2ochannelId;
     private String  o2ochannelName;
 

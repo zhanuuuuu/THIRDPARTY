@@ -715,7 +715,7 @@ public class MtStoreConntroller {
     @ApiOperation(value="小程序门店总部 模糊查询门店信息 getLikeStoreInfo (线下)", notes="小程序门店总部 模糊查询门店信息getLikeStoreInfo (线下)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "jsondata", value = "{\n" +
-                    "\t\"sqltext\": \"getStoreInfo\",\n" +
+                    "\t\"sqltext\": \"getLikeStoreInfo\",\n" +
                     "\t\"appId\": \"4115\",\n" +
                     "\t\"appSecret\": \"f0b1b7d92d96485e704316604a24bd5a\",\n" +
                     "\t\"O2OChannelId\": \"1\",\n" +
