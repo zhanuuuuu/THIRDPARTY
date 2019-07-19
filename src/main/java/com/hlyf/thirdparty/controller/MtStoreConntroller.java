@@ -148,6 +148,53 @@ public class MtStoreConntroller {
     }
 
 
+    @ApiOperation(value="小程序总部 添加调价规则 AddVirtualShopGoodsPriceRule（线下）", notes="小程序总部 添加调价规则AddVirtualShopGoodsPriceRule （线下） " +
+            "说明  ： " +
+            "  in:(virtualshopid:门店编号 GoodsId:商品ID,GoodsGroupName:类别名称,LowerRate:允许下调率（大于0小于1格式0.2）,LowerRate:允许上浮率（大于0小于1格式0.2），\n" +
+            "-- StartTime：规则开始时间,EndTime：规则结束时间\n" +
+            "-- )")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "jsondata", value = "{\n" +
+                    " \"sqltext\":\"AddVirtualShopGoodsPriceRule\",\n" +
+                    " \"appId\": \"4115\",\n" +
+                    " \"appSecret\": \"f0b1b7d92d96485e704316604a24bd5a\",\n" +
+                    " \"O2OChannelId\": \"1\",\n" +
+                    " }",paramType ="query" ,required = true,dataType = "string",defaultValue = "4115"),
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful — 请求已完成",reference="77777",responseContainer="8888888"),
+            @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+            @ApiResponse(code = 403, message = "服务器拒绝请求"),
+            @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+            @ApiResponse(code = 404, message = "服务器找不到给定的资源；文档不存在"),
+            @ApiResponse(code = 500, message = "服务器不能完成请求")})
+    @RequestMapping(value = "api/v1/poi/AddVirtualShopGoodsPriceRule", method = RequestMethod.POST)
+    @ResponseBody
+    public  String AddVirtualShopGoodsPriceRule(@RequestParam(value = "jsondata",required = true) String jsondata,
+                              HttpServletRequest request){
+        String result="";
+
+        try {
+            //第三种方式
+            Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);
+            System.out.println("CreateShop");
+            Map<String,String> new_map_String = new HashMap();
+            for(Object key:maprequest.keySet()){
+                new_map_String.put(key+"", String.valueOf(maprequest.get(key)==null? "":maprequest.get(key)));
+                System.out.println(key+" : "+String.valueOf(maprequest.get(key)));
+            }
+
+            result=mtService.AddVirtualShopGoodsPriceRuleS(new_map_String,jsondata);
+        } catch (ApiSysException |ApiOpException |UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return com.alibaba.fastjson.JSONObject.toJSONString(
+                    new ResultMsg(true, ""+ GlobalEumn.PARAMETERS_ERROR.getCode(),
+                            GlobalEumn.PARAMETERS_ERROR.getMesssage(), (ResultMsg) null));
+        }
+        return result;
+    }
+
+
     @ApiOperation(value="小程序总部 查询临时门店seltempShop (线下)", notes="小程序总部 查询临时门店seltempShop （线下）")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "jsondata", value = "{\n" +
@@ -179,6 +226,51 @@ public class MtStoreConntroller {
             }
 
             result=mtService.seltempShopS(maprequest,jsondata);
+        } catch (ApiSysException|ApiOpException|UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return com.alibaba.fastjson.JSONObject.toJSONString(
+                    new ResultMsg(true, ""+ GlobalEumn.PARAMETERS_ERROR.getCode(),
+                            GlobalEumn.PARAMETERS_ERROR.getMesssage(), (ResultMsg) null));
+        }
+        return result;
+    }
+
+    @ApiOperation(value="小程序总部 查询调价规则 GetVirtualShopGoodsPriceRules (线下)", notes="小程序总部 查询调价规则 GetVirtualShopGoodsPriceRules （线下）" +
+
+            "in:(Id:规则ID,virtualshopid:门店编号 GoodsId:商品ID,GoodsGroupName:类别名称,LowerRate:允许下调率（大于0小于1格式0.2）,LowerRate:允许上浮率（大于0小于1格式0.2），\n" +
+            "-- StartTime：规则开始时间,EndTime：规则结束时间\n" +
+            "-- )\n" +
+            "-- out:(result：天机成功返回1，添加失败返回0 \t")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "jsondata", value = "{\n" +
+                    "\t\"sqltext\": \"GetVirtualShopGoodsPriceRules\",\n" +
+                    "\t\"appId\": \"4115\",\n" +
+                    "\t\"appSecret\": \"f0b1b7d92d96485e704316604a24bd5a\",\n" +
+                    "\t\"O2OChannelId\": \"1\"\n" +
+                    "}",paramType ="query" ,required = true,dataType = "string",defaultValue = "4115"),
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful — 请求已完成",reference="77777",responseContainer="8888888"),
+            @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+            @ApiResponse(code = 403, message = "服务器拒绝请求"),
+            @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+            @ApiResponse(code = 404, message = "服务器找不到给定的资源；文档不存在"),
+            @ApiResponse(code = 500, message = "服务器不能完成请求")})
+    @RequestMapping(value = "api/v1/poi/GetVirtualShopGoodsPriceRules", method = RequestMethod.POST)
+    @ResponseBody
+    public  String GetVirtualShopGoodsPriceRules(@RequestParam(value = "jsondata",required = true) String jsondata,
+                               HttpServletRequest request){
+        String result="";
+
+        try {
+            //第三种方式
+            Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);
+            System.out.println("seltempShop");
+            for (Object obj : maprequest.keySet()){
+                System.out.println("key为："+obj+"  值为："+maprequest.get(obj));
+            }
+
+            result=mtService.GetVirtualShopGoodsPriceRulesS(maprequest,jsondata);
         } catch (ApiSysException|ApiOpException|UnsupportedEncodingException e) {
             e.printStackTrace();
             return com.alibaba.fastjson.JSONObject.toJSONString(
@@ -275,6 +367,53 @@ public class MtStoreConntroller {
             }
 
             result=mtService.EditVirtualShopS(new_map_String,jsondata);
+        } catch (ApiSysException|ApiOpException|UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return com.alibaba.fastjson.JSONObject.toJSONString(
+                    new ResultMsg(true, ""+ GlobalEumn.PARAMETERS_ERROR.getCode(),
+                            GlobalEumn.PARAMETERS_ERROR.getMesssage(), (ResultMsg) null));
+        }
+        return result;
+    }
+
+    @ApiOperation(value="小程序总部 删除调价规则 DeleteVirtualShopGoodsPriceRule (线下)", notes="" +
+            "in:(virtualshopid:门店编号 GoodsId:商品ID,GoodsGroupName:类别名称,LowerRate:允许下调率（大于0小于1格式0.2）,LowerRate:允许上浮率（大于0小于1格式0.2），\n" +
+            "-- StartTime：规则开始时间,EndTime：规则结束时间\n" +
+            "-- )\n" +
+            "-- out:(result：天机成功返回1，添加失败返回0 \t\n" +
+            "-- )")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "jsondata", value = "{\n" +
+                    "\t\"sqltext\": \"DeleteVirtualShopGoodsPriceRule\",\n" +
+                    "\t\"appId\": \"4115\",\n" +
+                    "\t\"appSecret\": \"f0b1b7d92d96485e704316604a24bd5a\",\n" +
+                    "\t\"O2OChannelId\": \"1\"\n" +
+                    "}",paramType ="query" ,required = true,dataType = "string",defaultValue = "4115"),
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful — 请求已完成",reference="77777",responseContainer="8888888"),
+            @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+            @ApiResponse(code = 403, message = "服务器拒绝请求"),
+            @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+            @ApiResponse(code = 404, message = "服务器找不到给定的资源；文档不存在"),
+            @ApiResponse(code = 500, message = "服务器不能完成请求")})
+    @RequestMapping(value = "api/v1/poi/DeleteVirtualShopGoodsPriceRule", method = RequestMethod.POST)
+    @ResponseBody
+    public  String DeleteVirtualShopGoodsPriceRule(@RequestParam(value = "jsondata",required = true) String jsondata,
+                                   HttpServletRequest request){
+        String result="";
+
+        try {
+            //第三种方式
+            Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);
+            System.out.println("EditVirtualShop");
+            Map<String,String> new_map_String = new HashMap();
+            for(Object key:maprequest.keySet()){
+                new_map_String.put(key+"", String.valueOf(maprequest.get(key)==null? "":maprequest.get(key)));
+                System.out.println(key+" : "+String.valueOf(maprequest.get(key)));
+            }
+
+            result=mtService.DeleteVirtualShopGoodsPriceRuleS(new_map_String,jsondata);
         } catch (ApiSysException|ApiOpException|UnsupportedEncodingException e) {
             e.printStackTrace();
             return com.alibaba.fastjson.JSONObject.toJSONString(
@@ -564,6 +703,47 @@ public class MtStoreConntroller {
                 System.out.println("key为："+obj+"  值为："+maprequest.get(obj));
             }
             result=this.mtStoreService.GetStoreInfoS(jsondata);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return com.alibaba.fastjson.JSONObject.toJSONString(
+                    new ResultMsg(true, ""+ GlobalEumn.PARAMETERS_ERROR.getCode(),
+                            GlobalEumn.PARAMETERS_ERROR.getMesssage(), ""));
+        }
+        return result;
+    }
+
+    @ApiOperation(value="小程序门店总部 模糊查询门店信息 getLikeStoreInfo (线下)", notes="小程序门店总部 模糊查询门店信息getLikeStoreInfo (线下)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "jsondata", value = "{\n" +
+                    "\t\"sqltext\": \"getStoreInfo\",\n" +
+                    "\t\"appId\": \"4115\",\n" +
+                    "\t\"appSecret\": \"f0b1b7d92d96485e704316604a24bd5a\",\n" +
+                    "\t\"O2OChannelId\": \"1\",\n" +
+                    "\t\"VirtualShopName\": \"门店名称\",\n" +
+                    "\t\"phone\": \"手机号\"\n" +
+                    "}",paramType ="query" ,required = true,dataType = "string",defaultValue = "4115"),
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful — 请求已完成",reference="77777",responseContainer="8888888"),
+            @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+            @ApiResponse(code = 403, message = "服务器拒绝请求"),
+            @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+            @ApiResponse(code = 404, message = "服务器找不到给定的资源；文档不存在"),
+            @ApiResponse(code = 500, message = "服务器不能完成请求")})
+    @RequestMapping(value = "api/offline/poi/getLikeStoreInfo", method = RequestMethod.POST)
+    @ResponseBody
+    public  String getLikeStoreInfo(@RequestParam(value = "jsondata",required = true) String jsondata,
+                                       HttpServletRequest request){
+        String result="";
+
+        try {
+            //第三种方式
+            Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);
+            System.out.println("获取线下门店");
+            for (Object obj : maprequest.keySet()){
+                System.out.println("key为："+obj+"  值为："+maprequest.get(obj));
+            }
+            result=this.mtStoreService.getLikeStoreInfoS(jsondata);
         } catch (Exception e) {
             e.printStackTrace();
             return com.alibaba.fastjson.JSONObject.toJSONString(

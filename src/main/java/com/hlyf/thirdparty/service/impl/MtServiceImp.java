@@ -7,6 +7,7 @@ import com.hlyf.thirdparty.dao.miniprogram.MtStoreDao;
 import com.hlyf.thirdparty.dao.miniprogram.meituanDao;
 import com.hlyf.thirdparty.domain.RepResult;
 import com.hlyf.thirdparty.domain.Shop;
+import com.hlyf.thirdparty.domain.ShopGoodsPriceRules;
 import com.hlyf.thirdparty.domain.TempShop;
 import com.hlyf.thirdparty.mertuanoverwrite.SignGeneratorByZ;
 import com.hlyf.thirdparty.mertuanoverwrite.URLFactoryByZ;
@@ -189,6 +190,7 @@ public class MtServiceImp implements MtService,MtpushConfig {
         return resultString;
 
     }
+
     @Override
     public String CreateShopS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
 
@@ -200,6 +202,26 @@ public class MtServiceImp implements MtService,MtpushConfig {
                 String dataTrue= JSON.toJSONString(map);
                 log.info("转换出来的请求过程的数据 {} ",dataTrue);
                 resultString=CommonUtilImpl.CommExecProce(dataTrue,this.MtDao,"创建门店接口(线下)");
+                break;
+            default:
+                log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);
+                break;
+        }
+        return resultString;
+
+    }
+
+    @Override
+    public String AddVirtualShopGoodsPriceRuleS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
+
+        String resultString="";
+        Integer type=Integer.valueOf((String) map.get("O2OChannelId"));
+        switch (type){
+            case 1://美团
+                log.info("原始数据 {} ",data);
+                String dataTrue= JSON.toJSONString(map);
+                log.info("转换出来的请求过程的数据 {} ",dataTrue);
+                resultString=CommonUtilImpl.CommExecProce(dataTrue,this.MtDao,"小程序总部 添加调价规则AddVirtualShopGoodsPriceRule(线下)");
                 break;
             default:
                 log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);
@@ -228,6 +250,24 @@ public class MtServiceImp implements MtService,MtpushConfig {
         }
         return resultString;
 
+    }
+
+    @Override
+    public String DeleteVirtualShopGoodsPriceRuleS(Map map, String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
+        String resultString="";
+        Integer type=Integer.valueOf((String) map.get("O2OChannelId"));
+        switch (type){
+            case 1://美团
+                log.info("原始数据 {} ",data);
+                String dataTrue= JSON.toJSONString(map);
+                log.info("转换出来的请求过程的数据 {} ",dataTrue);
+                resultString=CommonUtilImpl.CommExecProce(dataTrue,this.MtDao,"小程序总部 删除调价规则 DeleteVirtualShopGoodsPriceRule (线下)");
+                break;
+            default:
+                log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);
+                break;
+        }
+        return resultString;
     }
 
     @Override
@@ -264,6 +304,39 @@ public class MtServiceImp implements MtService,MtpushConfig {
         }
         return resultString;
 
+    }
+
+    @Override
+    public String GetVirtualShopGoodsPriceRulesS(Map map, String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
+        String resultString="";
+        Integer type=Integer.valueOf((String) map.get("O2OChannelId"));
+        switch (type){
+            case 1://美团
+                log.info("原始数据 {} ",data);
+                try{
+                    List<ShopGoodsPriceRules> repResult= mtStoreDao.GetShopGoodsPriceRules(data);
+                    if(repResult!=null && repResult.size()>0 ){
+                        resultString= JSONObject.toJSONString(
+                                new ResultMsg(true, GlobalEumn.SUCCESS.getCode()+"",
+                                        GlobalEumn.SUCCESS.getMesssage(),repResult));
+                    }else {
+                        resultString= JSONObject.toJSONString(
+                                new ResultMsg(true, GlobalEumn.MINIPROGRAM_EMPTY.getCode()+"",
+                                        GlobalEumn.MINIPROGRAM_EMPTY.getMesssage(),""));
+                    }
+                }catch (Exception e){
+                    log.error(Thread.currentThread().getStackTrace()[1].getMethodName() +" 调用我们的过程出错了 {}",e.getMessage());
+                    resultString= JSONObject.toJSONString(
+                            new ResultMsg(true, GlobalEumn.SYSTEM_ERROR.getCode()+"",
+                                    GlobalEumn.SYSTEM_ERROR.getMesssage(),""));
+                }
+
+                break;
+            default:
+                log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);
+                break;
+        }
+        return resultString;
     }
 
     @Override

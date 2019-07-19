@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public interface MtStoreService {
 
-
+    String getLikeStoreInfoS(String callJsonText);
     String GetStoreInfoS(String callJsonText);
 
     String GetStoreGoodsInfoS(String callJsonText);

@@ -118,7 +118,7 @@ public class OfflineGoodConntroller {
     }
 
 
-    @ApiOperation(value="创建商品 （同步到美团）", notes="创建商品 （同步到美团）")
+    @ApiOperation(value="创建商品 （同步到美团） （线下）", notes="创建商品 （同步到美团）")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "jsondata", value = "{\n" +
                     "\t\"sqltext\": \"AddVirtualShopGoods\",\n" +
@@ -190,7 +190,52 @@ public class OfflineGoodConntroller {
     }
 
 
-    @ApiOperation(value="创建商品分类 （同步到美团）", notes="创建商品分类 （同步到美团）")
+    @ApiOperation(value="小程序总部 删除类别 DeleteGoodsCategory （线下）", notes="小程序总部 删除类别 DeleteGoodsCategory")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "jsondata", value = "{\n" +
+                    "\t\"sqltext\": \"DeleteGoodsCategory\",\n" +
+                    "\t\"appId\": \"4115\",\n" +
+                    "\t\"appSecret\": \"f0b1b7d92d96485e704316604a24bd5a\",\n" +
+                    "\t\"O2OChannelId\": \"1\",\n" +
+                    "\t\"app_poi_code\": \"门店编号\",\n" +
+                    "\t\"phone\": \"手机号\",\n" +
+                    "\t\"GoodsGroupName\": \"商品分类名称：(1)限定长度不超过8个字符\",\n" +
+                    "\t\"category_name\": \"商品分类名称：(1)限定长度不超过8个字符\"\n" +
+                    "}",paramType ="query" ,required = true,dataType = "string",defaultValue = "4115"),
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful — 请求已完成",reference="77777",responseContainer="8888888"),
+            @ApiResponse(code = 400, message = "请求中有语法问题，或不能满足请求"),
+            @ApiResponse(code = 403, message = "服务器拒绝请求"),
+            @ApiResponse(code = 401, message = "未授权客户机访问数据"),
+            @ApiResponse(code = 404, message = "服务器找不到给定的资源；文档不存在"),
+            @ApiResponse(code = 500, message = "服务器不能完成请求")})
+    @RequestMapping(value = "api/offline/poi/DeleteGoodsCategory", method = RequestMethod.POST)
+    @ResponseBody
+    public  String DeleteGoodsCategory(@RequestParam(value = "jsondata",required = true) String jsondata,
+                                              HttpServletRequest request){
+        String result="";
+        try {
+            //第三种方式
+            Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);
+            System.out.println("删除商品类别");
+            for (Object obj : maprequest.keySet()){
+                System.out.println("key为："+obj+"  值为："+maprequest.get(obj));
+            }
+            result=this.offlineGoodService.DeleteGoodsCategoryS(maprequest,jsondata,
+                    "https://waimaiopen.meituan.com/api/v1/retailCat/update",
+                    "POST");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return com.alibaba.fastjson.JSONObject.toJSONString(
+                    new ResultMsg(true, ""+ GlobalEumn.PARAMETERS_ERROR.getCode(),
+                            GlobalEumn.PARAMETERS_ERROR.getMesssage(), ""));
+        }
+        return result;
+    }
+
+
+    @ApiOperation(value="创建商品分类 （同步到美团） (线下)", notes="创建商品分类 （同步到美团）")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "jsondata", value = "{\n" +
                     "\t\"sqltext\": \"AddGoodsCategory\",\n" +
@@ -212,7 +257,7 @@ public class OfflineGoodConntroller {
     @RequestMapping(value = "api/offline/poi/AddGoodsCategory", method = RequestMethod.POST)
     @ResponseBody
     public  String AddGoodsCategory(@RequestParam(value = "jsondata",required = true) String jsondata,
-                                              HttpServletRequest request){
+                                    HttpServletRequest request){
         String result="";
         try {
             //第三种方式

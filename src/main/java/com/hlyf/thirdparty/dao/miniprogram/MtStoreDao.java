@@ -1,9 +1,6 @@
 package com.hlyf.thirdparty.dao.miniprogram;
 
-import com.hlyf.thirdparty.domain.Shop;
-import com.hlyf.thirdparty.domain.StoreGoodsInfo;
-import com.hlyf.thirdparty.domain.StoreInfo;
-import com.hlyf.thirdparty.domain.TempShop;
+import com.hlyf.thirdparty.domain.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,5 +20,9 @@ public interface MtStoreDao {
     List<TempShop> GetTempShop(@Param("callJsonText")String callJsonText);
 
     List<Shop> GetShop(@Param("callJsonText")String callJsonText);
+
+    List<SearchStores> GetSearchStores(@Param("callJsonText")String callJsonText);
+
+    List<ShopGoodsPriceRules> GetShopGoodsPriceRules(@Param("callJsonText")String callJsonText);
 
 }

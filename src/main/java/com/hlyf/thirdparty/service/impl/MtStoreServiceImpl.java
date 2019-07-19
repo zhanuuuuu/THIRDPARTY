@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hlyf.thirdparty.dao.miniprogram.MtStoreDao;
 import com.hlyf.thirdparty.dao.miniprogram.meituanDao;
+import com.hlyf.thirdparty.domain.SearchStores;
 import com.hlyf.thirdparty.domain.StoreGoodsInfo;
 import com.hlyf.thirdparty.domain.StoreInfo;
 import com.hlyf.thirdparty.mertuanoverwrite.URLFactoryByZ;
@@ -33,6 +34,29 @@ public class MtStoreServiceImpl implements MtStoreService {
 
     @Autowired
     private meituanDao MtDao;
+
+    @Override
+    public String getLikeStoreInfoS(String callJsonText) {
+        try{
+            List<SearchStores> storeInfoList=this.mtStoreDao.GetSearchStores(callJsonText);
+            if(storeInfoList!=null  && storeInfoList.size()>0){
+                return JSONObject.toJSONString(
+                        new ResultMsg(true, GlobalEumn.SUCCESS.getCode()+"",
+                                GlobalEumn.SUCCESS.getMesssage(),storeInfoList));
+            }else {
+                return JSONObject.toJSONString(
+                        new ResultMsg(true, GlobalEumn.MINIPROGRAM_EMPTY.getCode()+"",
+                                GlobalEumn.MINIPROGRAM_EMPTY.getMesssage(),""));
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("获取门店出错了 {}",e.getMessage());
+            return JSONObject.toJSONString(
+                    new ResultMsg(true, GlobalEumn.SYSTEM_ERROR.getCode()+"",
+                            GlobalEumn.SYSTEM_ERROR.getMesssage(),""));
+        }
+    }
 
     @Override
     public String GetStoreInfoS(String callJsonText) {

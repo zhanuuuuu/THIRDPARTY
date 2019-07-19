@@ -218,6 +218,38 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
     }
 
     @Override
+    public String DeleteGoodsCategoryS(Map map, String data, String url, String method) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
+        String resultString="";
+        Integer type=Integer.valueOf((String) map.get("O2OChannelId"));
+        switch (type){
+            case 1://美团
+                Map systemParamsMap = URLFactoryByZ.getsystemParamsMap((String) map.get("appId"), (String) map.get("appSecret"));
+                String sqltext=(String) map.get("sqltext");
+                try{
+                    Map preMap=map;
+                    String afterMapdata= JSON.toJSONString(preMap);
+                    log.info("删除商品分类 转出来的json格式 看下格式 ： {} ",afterMapdata);
+                    Map<String,String> parmsMap = new HashMap<>();
+                    parmsMap.put("app_poi_code",(String)map.get("app_poi_code"));
+                    parmsMap.put("category_name",(String)map.get("category_name"));
+                    resultString = URLFactoryByZ.requestApi(method,
+                            url, systemParamsMap, parmsMap);
+                    resultString=CommonUtilImpl.CommExe(resultString,afterMapdata,MtDao);
+                }catch (Exception e){
+                    log.error("删除商品分类 调用我们的过程出错了 {}",e.getMessage());
+                    return JSONObject.toJSONString(
+                            new ResultMsg(true, GlobalEumn.SYSTEM_ERROR.getCode()+"",
+                                    GlobalEumn.SYSTEM_ERROR.getMesssage(),""));
+                }
+                break;
+            default:
+                log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);
+                break;
+        }
+        return resultString;
+    }
+
+    @Override
     public String ChangeVirtualShopGoodsStock(Map map, String data, String url, String method) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
         String resultString="";
         Integer type=Integer.valueOf((String) map.get("O2OChannelId"));
