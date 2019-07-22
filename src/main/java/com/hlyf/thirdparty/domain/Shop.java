@@ -24,6 +24,7 @@ import lombok.experimental.Accessors;
 public class Shop {
 
     private String  result;
+    private String  address;
     private String  virtualshopid;
     private String  virtualshopName;
     private String  o2ochannelId;

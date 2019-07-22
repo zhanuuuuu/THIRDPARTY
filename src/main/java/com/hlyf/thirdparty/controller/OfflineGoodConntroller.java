@@ -223,7 +223,7 @@ public class OfflineGoodConntroller {
                 System.out.println("key为："+obj+"  值为："+maprequest.get(obj));
             }
             result=this.offlineGoodService.DeleteGoodsCategoryS(maprequest,jsondata,
-                    "https://waimaiopen.meituan.com/api/v1/retailCat/update",
+                    "https://waimaiopen.meituan.com/api/v1/retailCat/delete",
                     "POST");
         } catch (Exception e) {
             e.printStackTrace();

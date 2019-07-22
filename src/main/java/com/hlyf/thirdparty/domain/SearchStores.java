@@ -15,6 +15,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain=true)
 @ToString
 public class SearchStores {
+
     private String  result;
     private String  virtualshopid;
     private String  virtualshopName;
