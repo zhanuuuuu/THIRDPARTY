@@ -2,6 +2,7 @@ package com.hlyf.thirdparty.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.hlyf.thirdparty.config.MpUrlConfig;
 import com.hlyf.thirdparty.config.WeChatConfig;
 import com.hlyf.thirdparty.dao.miniprogram.meituanDao;
@@ -160,7 +161,7 @@ public class MiniServiceImpl implements MiniService,MpUrlConfig {
             if(loginResultList!=null && loginResultList.size()>0 && loginResultList.get(0).getResult().equals("1")){
                 resultString=JSONObject.toJSONString(
                         new ResultMsg(true, ""+ GlobalEumn.SUCCESS.getCode(),
-                                GlobalEumn.SUCCESS.getMesssage(), JSON.toJSONString(loginResultList)));
+                                GlobalEumn.SUCCESS.getMesssage(), JSON.toJSONString(loginResultList, SerializerFeature.WriteMapNullValue)));
             }else {
                 resultString=JSONObject.toJSONString(
                         new ResultMsg(true, ""+ GlobalEumn.MINIPROGRAM_EMPTY.getCode(),
@@ -172,7 +173,6 @@ public class MiniServiceImpl implements MiniService,MpUrlConfig {
                     new ResultMsg(true, ""+ GlobalEumn.SYSTEM_ERROR.getCode(),
                             GlobalEumn.SYSTEM_ERROR.getMesssage(), ""));
         }
-
         return resultString;
     }
 }

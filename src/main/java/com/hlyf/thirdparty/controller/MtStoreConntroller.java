@@ -712,7 +712,14 @@ public class MtStoreConntroller {
         return result;
     }
 
-    @ApiOperation(value="小程序门店总部 模糊查询门店信息 getLikeStoreInfo (线下)", notes="小程序门店总部 模糊查询门店信息getLikeStoreInfo (线下)")
+    @ApiOperation(value="小程序门店总部 模糊查询门店信息 getLikeStoreInfo (线下)",
+            notes="小程序门店总部 模糊查询门店信息getLikeStoreInfo (线下) " +
+                    "" +
+                    "in:(virtualshopid:虚拟门店编号\tphone:手机号 GoodsGroupId:商品分类编号，goodsinfo:商品模糊查询信息)\n" +
+                    "-- out:(result：查询成功返回1，查询失败返回0 \tvirtualshopid:门店编号 virtualshopName:门店名称 o2ochannelId:渠道编号\to2ochannelName:渠道名称\n" +
+                    "-- goodsName:商品名称\t\tO2OCode:渠道方商品名称 GoodsId:商品ID description:商品描述 skus:美团SKU——json格式 ObtainedPrice:门店价格\n" +
+                    "-- CostPrice:成本价  min_order_count:一个订单的最小购买量\t\tunit:单位 spec:规格  box_num:单个商品需要打包盒数量 box_price:打包盒单价\n" +
+                    "-- GoodsGroupId:类别ID\t\tGoodsGroupName:类别名称 \tStatus:商品上下架状态 0-上架，1-下架\t\tImageUrl:图片路径 stock 库存")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "jsondata", value = "{\n" +
                     "\t\"sqltext\": \"getLikeStoreInfo\",\n" +
@@ -753,7 +760,17 @@ public class MtStoreConntroller {
         return result;
     }
 
-    @ApiOperation(value="获取线下门店商品 (线下)", notes="获取线下门店商品")
+    @ApiOperation(value="小程序门店 点击分类获取商品信息 getStoreGoodsInfo  （线下）", notes="" +
+            "in:(virtualshopid:虚拟门店编号\tphone:手机号 GoodsGroupId:商品分类编号，goodsinfo:商品模糊查询信息)" +
+            "（ 备注 ：" +
+            "GoodsGroupId:商品分类编号，goodsinfo:商品模糊查询信息 只能上传一个）\n" +
+
+            "-- out:(result：查询成功返回1，查询失败返回0 \tvirtualshopid:门店编号 virtualshopName:门店名称 o2ochannelId:渠道编号\to2ochannelName:渠道名称\n" +
+            "-- goodsName:商品名称\t\tO2OCode:渠道方商品名称 GoodsId:商品ID description:商品描述 skus:美团SKU——json格式 ObtainedPrice:门店价格\n" +
+            "-- CostPrice:成本价  min_order_count:一个订单的最小购买量\t\tunit:单位 spec:规格  box_num:单个商品需要打包盒数量 box_price:打包盒单价\n" +
+            "-- GoodsGroupId:类别ID\t\tGoodsGroupName:类别名称 \tStatus:商品上下架状态 0-上架，1-下架\t\tImageUrl:图片路径 stock 库存,onStatus:是否允许上下架 0:允许，1只允许上架，2只允许下架\n" +
+            "-- Barcode:国际条码 IsFresh:是否生鲜 （0：否，1：是） ,IsPacked:是否打包卖（0：否，1：是）" +
+            "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "jsondata", value = "{\n" +
                     "\t\"sqltext\": \"getStoreGoodsInfo\",\n" +
@@ -762,6 +779,7 @@ public class MtStoreConntroller {
                     "\t\"O2OChannelId\": \"1\",\n" +
                     "\t\"virtualshopid\": \"虚拟门店标号\",\n" +
                     "\t\"GoodsGroupId\": \"GoodsGroupId\",\n" +
+                    "\t\"goodsinfo\": \"goodsinfo\",\n" +
                     "\t\"phone\": \"手机号\"\n" +
                     "}",paramType ="query" ,required = true,dataType = "string",defaultValue = "4115"),
     })

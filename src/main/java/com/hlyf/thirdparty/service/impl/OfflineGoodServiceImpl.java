@@ -128,7 +128,7 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
                         //这里符合我们上架规则才可以上架
                         Map<String,String> parmsMapTrue=new HashMap<String,String>();
                         String skus="[{\n" +
-                                "\t\"sku_id\": \""+preMap.get("sku_id")+"\",\n" +
+                                "\t\"sku_id\": \""+repResult.getGoodsid()+"\",\n" +
                                 "\t\"spec\": \""+preMap.get("spec")+"\",\n" +
                                 "\t\"price\": \""+repResult.getMtprice()+"\",\n" +
                                 "\t\"stock\": \""+preMap.get("stock")+"\",\n" +
@@ -160,8 +160,8 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
                                     new ResultMsg(true, GlobalEumn.SUCCESS_ERRORTOW.getCode()+"",
                                             GlobalEumn.SUCCESS_ERRORTOW.getMesssage(),resultString));
                         }
-
                         preMap.put("goodsid",repResult.getGoodsid());
+                        preMap.put("skus",skus.replaceAll("\\s","").replaceAll("\\n",""));
                         String afterMapdata= JSON.toJSONString(preMap);
                         log.info("商品新增 转出来的json格式 看下格式 ： {} ",afterMapdata);
                         resultString=CommonUtilImpl.CommExe(resultString,afterMapdata,MtDao);
@@ -185,6 +185,76 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
         return resultString;
     }
 
+    @Override
+    public String EditVirtualShopGoods(Map map, String data, String url, String method) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
+        String resultString="";
+        Integer type=Integer.valueOf((String) map.get("O2OChannelId"));
+        switch (type){
+            case 1://美团
+                Map systemParamsMap = URLFactoryByZ.getsystemParamsMap((String) map.get("appId"), (String) map.get("appSecret"));
+                String sqltext=(String) map.get("sqltext");
+                try{
+                    Map preMap=map;
+                    preMap.put("calcPriceFlag","1");
+                    RepResult repResult=this.MtDao.ExecProceGetData(data);
+                    if(repResult!=null && repResult.getResult().equals("1")){
+                        //这里符合我们上架规则才可以上架
+                        Map<String,String> parmsMapTrue=new HashMap<String,String>();
+                        String skus="[{\n" +
+                                "\t\"sku_id\": \""+preMap.get("sku_id")+"\",\n" +
+                                "\t\"spec\": \""+preMap.get("spec")+"\",\n" +
+                                "\t\"price\": \""+repResult.getMtprice()+"\",\n" +
+                                "\t\"stock\": \""+preMap.get("stock")+"\",\n" +
+                                "\t\"box_num\": \""+preMap.get("box_num")+"\",\n" +
+                                "\t\"box_price\": \""+preMap.get("box_price")+"\"\n" +
+                                "}]";
+                        parmsMapTrue.put("app_poi_code",(String)preMap.get("virtualshopid"));
+                        parmsMapTrue.put("operate_type",2+"");
+                        parmsMapTrue.put("app_food_code",repResult.getGoodsid());
+                        parmsMapTrue.put("name",(String)preMap.get("Name"));
+                        parmsMapTrue.put("description",(String)preMap.get("Description"));
+                        parmsMapTrue.put("category_name",(String)preMap.get("goodsGroupId"));
+                        parmsMapTrue.put("skus",skus.replaceAll("\\s","").replaceAll("\\n",""));
+                        parmsMapTrue.put("price",Float.valueOf(repResult.getMtprice())+"");
+                        parmsMapTrue.put("min_order_count",(String)preMap.get("min_order_count"));
+                        parmsMapTrue.put("unit",(String)preMap.get("unit"));
+                        parmsMapTrue.put("is_sold_out",(String)preMap.get("is_sold_out"));
+                        parmsMapTrue.put("picture",(String)preMap.get("ImageUrl"));
+                        String parmsMapTrueString= JSON.toJSONString(parmsMapTrue);
+                        System.out.println(parmsMapTrueString);
+                        try{
+                            //这里可能会发生异常
+                            resultString = URLFactoryByZ.requestApi(method,
+                                    url, systemParamsMap, parmsMapTrue);
+                        }catch (ApiSysException|ApiOpException|UnsupportedEncodingException e){
+                            log.info("访问美团出错了 ： {} ",e.getMessage());
+                            e.printStackTrace();
+                            return JSONObject.toJSONString(
+                                    new ResultMsg(true, GlobalEumn.SUCCESS_ERRORTOW.getCode()+"",
+                                            GlobalEumn.SUCCESS_ERRORTOW.getMesssage(),resultString));
+                        }
+                        String afterMapdata= JSON.toJSONString(preMap);
+                        log.info("商品修改 转出来的json格式 看下格式 ： {} ",afterMapdata);
+                        resultString=CommonUtilImpl.CommExe(resultString,afterMapdata,MtDao);
+                    }else {
+                        return JSONObject.toJSONString(
+                                new ResultMsg(true, GlobalEumn.MINIPROGRAM_ADDGOOD.getCode()+"",
+                                        GlobalEumn.MINIPROGRAM_ADDGOOD.getMesssage(),""));
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    log.error("新增修改 调用我们的过程出错了 {}",e.getMessage());
+                    return JSONObject.toJSONString(
+                            new ResultMsg(true, GlobalEumn.SYSTEM_ERROR.getCode()+"",
+                                    GlobalEumn.SYSTEM_ERROR.getMesssage(),""));
+                }
+                break;
+            default:
+                log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);
+                break;
+        }
+        return resultString;
+    }
     @Override
     public String AddGoodsCategory(Map map, String data, String url, String method) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
         String resultString="";
@@ -237,6 +307,41 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
                     resultString=CommonUtilImpl.CommExe(resultString,afterMapdata,MtDao);
                 }catch (Exception e){
                     log.error("删除商品分类 调用我们的过程出错了 {}",e.getMessage());
+                    return JSONObject.toJSONString(
+                            new ResultMsg(true, GlobalEumn.SYSTEM_ERROR.getCode()+"",
+                                    GlobalEumn.SYSTEM_ERROR.getMesssage(),""));
+                }
+                break;
+            default:
+                log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);
+                break;
+        }
+        return resultString;
+    }
+
+
+
+    @Override
+    public String DeleteVirtualShopGoodsS(Map map, String data, String url, String method)
+            throws ApiSysException, ApiOpException, UnsupportedEncodingException {
+        String resultString="";
+        Integer type=Integer.valueOf((String) map.get("O2OChannelId"));
+        switch (type){
+            case 1://美团
+                Map systemParamsMap = URLFactoryByZ.getsystemParamsMap((String) map.get("appId"), (String) map.get("appSecret"));
+                String sqltext=(String) map.get("sqltext");
+                try{
+                    Map preMap=map;
+                    String afterMapdata= JSON.toJSONString(preMap);
+                    log.info("删除商品 转出来的json格式 看下格式 ： {} ",afterMapdata);
+                    Map<String,String> parmsMap = new HashMap<>();
+                    parmsMap.put("app_poi_code",(String)map.get("virtualshopid"));
+                    parmsMap.put("app_food_code",(String)map.get("goodsId"));
+                    resultString = URLFactoryByZ.requestApi(method,
+                            url, systemParamsMap, parmsMap);
+                    resultString=CommonUtilImpl.CommExe(resultString,afterMapdata,MtDao);
+                }catch (Exception e){
+                    log.error("删除商品 调用我们的过程出错了 {}",e.getMessage());
                     return JSONObject.toJSONString(
                             new ResultMsg(true, GlobalEumn.SYSTEM_ERROR.getCode()+"",
                                     GlobalEumn.SYSTEM_ERROR.getMesssage(),""));

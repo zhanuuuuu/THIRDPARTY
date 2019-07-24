@@ -6,6 +6,8 @@ package com.hlyf.thirdparty.config;
  *   示例 1  接收美团 推送门店状态变更的url
  *        地址:http://148.70.87.251:8080/Thirdparty/meituan/api/getpush/storestateupdate(真实美团应该的配置)
  *       备注:http://ip:端口/Thirdparty/meituan/api/getpush/ 不变  后面拼接对应的地址码  storestateupdate
+ *       https://www.lbqc365.com/Thirdparty/meituan/api/getpush/ordersure
+ *
  */
 public interface MtpushConfig {
 

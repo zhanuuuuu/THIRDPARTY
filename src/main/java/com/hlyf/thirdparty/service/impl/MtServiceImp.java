@@ -1,14 +1,12 @@
 package com.hlyf.thirdparty.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hlyf.thirdparty.config.MtpushConfig;
 import com.hlyf.thirdparty.dao.miniprogram.MtStoreDao;
 import com.hlyf.thirdparty.dao.miniprogram.meituanDao;
-import com.hlyf.thirdparty.domain.RepResult;
-import com.hlyf.thirdparty.domain.Shop;
-import com.hlyf.thirdparty.domain.ShopGoodsPriceRules;
-import com.hlyf.thirdparty.domain.TempShop;
+import com.hlyf.thirdparty.domain.*;
 import com.hlyf.thirdparty.mertuanoverwrite.SignGeneratorByZ;
 import com.hlyf.thirdparty.mertuanoverwrite.URLFactoryByZ;
 import com.hlyf.thirdparty.result.GlobalEumn;
@@ -121,7 +119,16 @@ public class MtServiceImp implements MtService,MtpushConfig {
     }
 
     @Override
-    public String getpushS(HttpServletRequest request, String appSecret, String sig, String urlType) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
+    public String getpushS(HttpServletRequest request, String appSecret, String sig, String urlType,String app_id) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
+        //得到秘钥
+        Map<String,String> mapProce=new HashMap<String, String>();
+        mapProce.put("sqltext","getAppsercret");
+        mapProce.put("appid",app_id);
+        mapProce.put("O2OChannelId","1");
+        MtConfig mtConfig=this.MtDao.GetMtConfig(JSONObject.toJSONString(mapProce));
+        //重新赋值appSecret
+        appSecret=mtConfig.getAppSecret()==null ? appSecret:mtConfig.getAppSecret();
+        String result="{\"data\":\"ok\"}";
         //得到访问的路径
         String urlPrefix=request.getRequestURL().toString();
         Map parmsMap = URLFactoryByZ.getparamsMap(request);
@@ -135,7 +142,6 @@ public class MtServiceImp implements MtService,MtpushConfig {
         if(sigByMe.equals(sig)){
             //JDK8 支持字符串
             System.out.println(" 我进来了 签名一直:{}"+sigByMe);
-
             switch (urlType){
                 case STORESTATEUPDATE:
 
@@ -153,8 +159,21 @@ public class MtServiceImp implements MtService,MtpushConfig {
 
                     break;
 
-                case ORDERSURE://已确认订单
-
+                case ORDERSURE://已确认订单  暂时接受这个推送
+                    parmsMap.put("sqltext","SyncOrder");
+                    parmsMap.put("appId",app_id);
+                    parmsMap.put("appSecret",appSecret);
+                    parmsMap.put("O2OChannelId","1");
+                    String detail=request.getParameter("detail");
+                    log.info("detail {}",detail);
+                    JSONArray  detailArrayList = JSONObject.parseArray(detail);
+                    for(int i=0;i<detailArrayList.size();i++){
+                        String app_food_code=detailArrayList.getJSONObject(i).getString("app_food_code");
+                        parmsMap.put("app_food_code",app_food_code);
+                        String data=JSONObject.toJSONString(parmsMap);
+                        log.info("我是推送的美团已确认订单,转成json访问过程的数据为 {}",data);
+                        result=CommonUtilImpl.CommExecProcePushSend(data,this.MtDao,"已近确认订单 ");
+                    }
                     break;
                 case ORDERCOMPLETE://已完成订单
 
@@ -166,7 +185,7 @@ public class MtServiceImp implements MtService,MtpushConfig {
                     break;
             }
         }
-        return "{\"data\":\"ok\"}";
+        return result;
     }
 
     @Override

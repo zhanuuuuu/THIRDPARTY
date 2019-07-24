@@ -233,4 +233,22 @@ public class CommonUtilImpl {
                             GlobalEumn.PROCE_ERROR.getMesssage(),""));
         }
     }
+
+    public static String CommExecProcePushSend(String data, meituanDao mtDao,String urlTitle) {
+        try{
+            RepResult repResult= mtDao.ExecProceGetData(data);
+            if(repResult!=null &&  repResult.getResult().equals("1")){
+                return "{\"data\":\"ok\"}";
+            }else {
+                return JSONObject.toJSONString(
+                        new ResultMsg(true, GlobalEumn.PROCE_ERROR.getCode()+"",
+                                GlobalEumn.PROCE_ERROR.getMesssage(),""));
+            }
+        }catch (Exception e){
+            log.error(Thread.currentThread().getStackTrace()[1].getMethodName() +urlTitle+" 调用我们的过程出错了 {}",e.getMessage());
+            return JSONObject.toJSONString(
+                    new ResultMsg(true, GlobalEumn.PROCE_ERROR.getCode()+"",
+                            GlobalEumn.PROCE_ERROR.getMesssage(),""));
+        }
+    }
 }

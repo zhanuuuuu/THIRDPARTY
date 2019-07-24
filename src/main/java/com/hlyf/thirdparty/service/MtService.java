@@ -20,7 +20,7 @@ public interface MtService {
 
     String poistateupdateS(HttpServletRequest request,String appSecret,String sig) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
 
-    String getpushS(HttpServletRequest request,String appSecret,String sig,String urlType) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
+    String getpushS(HttpServletRequest request,String appSecret,String sig,String urlType,String app_id) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
 
     String poisaveS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
 

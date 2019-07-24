@@ -126,7 +126,7 @@ public class MeituanAllController {
                             HttpServletRequest request){
         String result="{\"data\":\"ok\"}";
         try {
-            result=mtService.getpushS(request,"f0b1b7d92d96485e704316604a24bd5a",sig,urlType);
+            result=mtService.getpushS(request,"f0b1b7d92d96485e704316604a24bd5a",sig,urlType,app_id);
         } catch (ApiSysException e) {
             e.printStackTrace();
             return "";

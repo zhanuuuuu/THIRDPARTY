@@ -38,4 +38,12 @@ public class StoreGoodsInfo {
     private String Status;
     private String ImageUrl;
     private String stock;
+
+    private String onStatus;
+    private String Barcode;
+    private String IsFresh;
+    private String IsPacked;
+
+
+
 }

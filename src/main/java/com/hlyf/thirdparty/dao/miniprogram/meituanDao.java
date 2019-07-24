@@ -1,10 +1,7 @@
 package com.hlyf.thirdparty.dao.miniprogram;
 
 
-import com.hlyf.thirdparty.domain.LoginResult;
-import com.hlyf.thirdparty.domain.RepResult;
-import com.hlyf.thirdparty.domain.StoreGoodsInfo;
-import com.hlyf.thirdparty.domain.StoreInfo;
+import com.hlyf.thirdparty.domain.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -29,4 +26,6 @@ public interface meituanDao {
     //获取门店的
     List<StoreInfo> GetStoreInfo(@Param("callJsonText")String callJsonText);
     RepResult GoodsSkusellStatusD(@Param("callJsonText")String callJsonText);
+
+    MtConfig GetMtConfig(@Param("callJsonText")String callJsonText);
 }
