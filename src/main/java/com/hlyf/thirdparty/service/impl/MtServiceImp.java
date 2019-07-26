@@ -258,10 +258,36 @@ public class MtServiceImp implements MtService,MtpushConfig {
         Integer type=Integer.valueOf((String) map.get("O2OChannelId"));
         switch (type){
             case 1://美团
+                Map systemParamsMap = URLFactoryByZ.getsystemParamsMap((String) map.get("appId"), (String) map.get("appSecret"));
                 log.info("原始数据 {} ",data);
-                String dataTrue= JSON.toJSONString(map);
-                log.info("转换出来的请求过程的数据 {} ",dataTrue);
-                resultString=CommonUtilImpl.CommExecProce(dataTrue,this.MtDao,"小程序总部 修改门店(线下)");
+                String afterMapdata= JSON.toJSONString(map);
+                log.info("转换出来的请求过程的数据 {} ",afterMapdata);
+
+                Map<String,String> parmsMapTrue=new HashMap<>();
+                parmsMapTrue.put("app_poi_code",(String)map.get("virtualshopid"));
+                parmsMapTrue.put("name",(String)map.get("name"));
+                parmsMapTrue.put("address",(String)map.get("address"));
+                parmsMapTrue.put("latitude",(String)map.get("longitude"));
+                parmsMapTrue.put("longitude",(String)map.get("latitude"));
+                parmsMapTrue.put("phone",(String)map.get("kfphone"));
+                parmsMapTrue.put("shipping_fee",(String)map.get("shipping_fee"));
+                parmsMapTrue.put("shipping_time",(String)map.get("shipping_time"));
+                parmsMapTrue.put("open_level",(String)map.get("open_level"));
+                parmsMapTrue.put("is_online",(String)map.get("is_online"));
+
+                parmsMapTrue.put("invoice_support",(String)map.get("invoice_support"));
+                parmsMapTrue.put("invoice_min_price",(String)map.get("invoice_min_price"));
+                parmsMapTrue.put("invoice_description",(String)map.get("invoice_description"));
+
+                parmsMapTrue.put("third_tag_name",(String)map.get("third_tag_name"));
+                parmsMapTrue.put("pre_book",(String)map.get("pre_book"));
+                parmsMapTrue.put("time_select",(String)map.get("time_select"));
+
+                //TODO 暂时先屏蔽掉美团的访问 后续开放这里
+                resultString="{\"data\":\"ok\"}";
+//                resultString = URLFactoryByZ.requestApi("POST",
+//                        "https://waimaiopen.meituan.com/api/v1/poi/save", systemParamsMap, parmsMapTrue);
+                resultString=CommonUtilImpl.CommExe(resultString,afterMapdata,MtDao);
                 break;
             default:
                 log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);
@@ -399,7 +425,6 @@ public class MtServiceImp implements MtService,MtpushConfig {
         map.remove("appId");
         map.remove("appSecret");
         MapRemoveNullUtil.removeNullValue(map);
-
         return map;
     }
 
@@ -437,17 +462,41 @@ public class MtServiceImp implements MtService,MtpushConfig {
 
 
     @Override
-    public String poiOpenS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
+    public String SetShopStatusS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException {
 
         String resultString="";
         Integer type=Integer.valueOf((String) map.get("O2OChannelId"));
         switch (type){
             case 1://美团
                 Map systemParamsMap = URLFactoryByZ.getsystemParamsMap((String) map.get("appId"), (String) map.get("appSecret"));
-                Map parmsMap = clearMap(map);
+                log.info("原始数据 {} ",data);
+                String afterMapdata= JSON.toJSONString(map);
+                log.info("转换出来的请求过程的数据 {} ",afterMapdata);
+                String StatusS=(String)map.get("Status");
+                String url;
+                Map<String,String> parmsMapTrue=new HashMap<>();
+                parmsMapTrue.put("app_poi_code",(String)map.get("virtualshopid"));
+                switch (StatusS) {
+                    case "open":
+                        url="https://waimaiopen.meituan.com/api/v1/poi/open";
+                        break;
+                    case "close":
+                        url="https://waimaiopen.meituan.com/api/v1/poi/close";
+                        break;
+                    case "offline":
+                        url="https://waimaiopen.meituan.com/api/v1/poi/offline";
+                        break;
+                    case "online":
+                        url="https://waimaiopen.meituan.com/api/v1/poi/online";
+                        break;
+                    default:
+                        url="https://waimaiopen.meituan.com/api/v1/poi/online";
+                        break;
+
+                }
                 resultString = URLFactoryByZ.requestApi("POST",
-                        "https://waimaiopen.meituan.com/api/v1/poi/open", systemParamsMap, parmsMap);
-                resultString=this.MyExecProce(resultString,data);
+                        url, systemParamsMap, parmsMapTrue);
+                resultString=CommonUtilImpl.CommExe(resultString,data,MtDao);
                 break;
             default:
                 log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);

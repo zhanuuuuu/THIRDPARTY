@@ -233,6 +233,7 @@ public class OfflineGoodServiceImpl implements OfflineGoodService {
                                     new ResultMsg(true, GlobalEumn.SUCCESS_ERRORTOW.getCode()+"",
                                             GlobalEumn.SUCCESS_ERRORTOW.getMesssage(),resultString));
                         }
+                        preMap.put("skus",skus.replaceAll("\\s","").replaceAll("\\n",""));
                         String afterMapdata= JSON.toJSONString(preMap);
                         log.info("商品修改 转出来的json格式 看下格式 ： {} ",afterMapdata);
                         resultString=CommonUtilImpl.CommExe(resultString,afterMapdata,MtDao);

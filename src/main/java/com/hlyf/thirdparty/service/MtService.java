@@ -35,7 +35,7 @@ public interface MtService {
 
     String GetVirtualShopGoodsPriceRulesS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
     String GetVirtualShopS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
-    String poiOpenS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
+    String SetShopStatusS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
     String poicloseS(Map map,String data) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
 
     String poiStoreS(Map map,String data,String url,String method) throws ApiSysException, ApiOpException, UnsupportedEncodingException;

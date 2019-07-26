@@ -22,6 +22,8 @@ public class ShopGoodsPriceRules {
     private String result;
     private String Id;
     private String goodsid;
+    private String goodsName;
+    private String Name;
     private String VirtualShopId;
     private String GoodsGroupName;
     private String LowerRate;

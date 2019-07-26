@@ -150,7 +150,8 @@ public class MtStoreConntroller {
 
     @ApiOperation(value="小程序总部 添加调价规则 AddVirtualShopGoodsPriceRule（线下）", notes="小程序总部 添加调价规则AddVirtualShopGoodsPriceRule （线下） " +
             "说明  ： " +
-            "  in:(virtualshopid:门店编号 GoodsId:商品ID,GoodsGroupName:类别名称,LowerRate:允许下调率（大于0小于1格式0.2）,LowerRate:允许上浮率（大于0小于1格式0.2），\n" +
+            "  in:(virtualshopid:门店编号 Name:规则名称 " +
+            "   GoodsId:商品ID,GoodsGroupName:类别名称,LowerRate:允许下调率（大于0小于1格式0.2）,LowerRate:允许上浮率（大于0小于1格式0.2），\n" +
             "-- StartTime：规则开始时间,EndTime：规则结束时间\n" +
             "-- )")
     @ApiImplicitParams({
@@ -177,7 +178,7 @@ public class MtStoreConntroller {
         try {
             //第三种方式
             Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);
-            System.out.println("CreateShop");
+            System.out.println("AddVirtualShopGoodsPriceRule");
             Map<String,String> new_map_String = new HashMap();
             for(Object key:maprequest.keySet()){
                 new_map_String.put(key+"", String.valueOf(maprequest.get(key)==null? "":maprequest.get(key)));
@@ -237,7 +238,7 @@ public class MtStoreConntroller {
 
     @ApiOperation(value="小程序总部 查询调价规则 GetVirtualShopGoodsPriceRules (线下)", notes="小程序总部 查询调价规则 GetVirtualShopGoodsPriceRules （线下）" +
 
-            "in:(Id:规则ID,virtualshopid:门店编号 GoodsId:商品ID,GoodsGroupName:类别名称,LowerRate:允许下调率（大于0小于1格式0.2）,LowerRate:允许上浮率（大于0小于1格式0.2），\n" +
+            "in:(Id:规则ID,virtualshopid:门店编号 goodsName:商品名称 Name:规则名称 GoodsId:商品ID,GoodsGroupName:类别名称,LowerRate:允许下调率（大于0小于1格式0.2）,LowerRate:允许上浮率（大于0小于1格式0.2），\n" +
             "-- StartTime：规则开始时间,EndTime：规则结束时间\n" +
             "-- )\n" +
             "-- out:(result：天机成功返回1，添加失败返回0 \t")
@@ -309,7 +310,6 @@ public class MtStoreConntroller {
     public  String GetVirtualShop(@RequestParam(value = "jsondata",required = true) String jsondata,
                                HttpServletRequest request){
         String result="";
-
         try {
             //第三种方式
             Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);
@@ -317,7 +317,6 @@ public class MtStoreConntroller {
             for (Object obj : maprequest.keySet()){
                 System.out.println("key为："+obj+"  值为："+maprequest.get(obj));
             }
-
             result=mtService.GetVirtualShopS(maprequest,jsondata);
         } catch (ApiSysException|ApiOpException|UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -330,7 +329,7 @@ public class MtStoreConntroller {
 
     @ApiOperation(value="小程序总部 修改门店 EditVirtualShop (线下)", notes="" +
             "小程序总部 修改门店 EditVirtualShop (线下)" +
-            "in:(virtualshopid:门店编号 name:门店名称\n" +
+            "in:(virtualshopid:门店编号 name:门店名称 address : 地址\n" +
             "-- longitude:经度\t\tlatitude:纬度 kfphone:客服电话 shipping_fee:订单配送费 shipping_time:门店营业时间 open_level:门店的营业状态：1为可配送，3为休息中\n" +
             "-- is_online:门店上下线状态：1为上线，0为下线  third_tag_name:门店品类 例如：火锅，特色菜，地方菜 \n" +
             "-- invoice_support:是否支持发票，invoice_min_price:门店支持开发票的最小订单价,invoice_description:发票相关说明,pre_book:是否支持营业时间范围外预下单(1：支持，0：不支持),time_select:是否支持营业时间范围内预下单(1：支持，0：不支持)\n" +
@@ -406,7 +405,7 @@ public class MtStoreConntroller {
         try {
             //第三种方式
             Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);
-            System.out.println("EditVirtualShop");
+            System.out.println("DeleteVirtualShopGoodsPriceRule");
             Map<String,String> new_map_String = new HashMap();
             for(Object key:maprequest.keySet()){
                 new_map_String.put(key+"", String.valueOf(maprequest.get(key)==null? "":maprequest.get(key)));
@@ -423,14 +422,16 @@ public class MtStoreConntroller {
         return result;
     }
 
-    @ApiOperation(value="美团门店设置为营业状态", notes="美团门店设置为营业状态")
+    @ApiOperation(value="美团门店营业状态 （线下） ", notes=" 小程序总部 门店营业休息下线上线状态修改SetShopStatus\n" +
+            "-- \tin:(virtualshopid：门店编号 `Status`:(open:营业，close:休息，offline:下线 online:上线)      --0123")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "jsondata", value = "{\n" +
-                    "\t\"sqltext\": \"createStore\",\n" +
+                    "\t\"sqltext\": \"SetShopStatus\",\n" +
                     "\t\"appId\": \"4115\",\n" +
                     "\t\"appSecret\": \"f0b1b7d92d96485e704316604a24bd5a\",\n" +
                     "\t\"O2OChannelId\": \"1\",\n" +
-                    "\t\"app_poi_code\": \"\"\n" +
+                    "\t\"Status\": \"1\",\n" +
+                    "\t\"virtualshopid\": \"\"\n" +
                     "}",paramType ="query" ,required = true,dataType = "string",defaultValue = "4115"),
     })
     @ApiResponses({
@@ -440,9 +441,9 @@ public class MtStoreConntroller {
             @ApiResponse(code = 401, message = "未授权客户机访问数据"),
             @ApiResponse(code = 404, message = "服务器找不到给定的资源；文档不存在"),
             @ApiResponse(code = 500, message = "服务器不能完成请求")})
-    @RequestMapping(value = "api/v1/poi/open", method = RequestMethod.POST)
+    @RequestMapping(value = "api/v1/poi/SetShopStatus", method = RequestMethod.POST)
     @ResponseBody
-    public  String poiOpen(@RequestParam(value = "jsondata",required = true) String jsondata,
+    public  String SetShopStatus(@RequestParam(value = "jsondata",required = true) String jsondata,
                            HttpServletRequest request){
         String result="";
 
@@ -450,11 +451,15 @@ public class MtStoreConntroller {
             //第三种方式
             Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);
             System.out.println("美团门店设置为营业状态 poiOpen");
-            for (Object obj : maprequest.keySet()){
-                System.out.println("key为："+obj+"  值为："+maprequest.get(obj));
+            System.out.println("SetShopStatus");
+            Map<String,String> new_map_String = new HashMap();
+            for(Object key:maprequest.keySet()){
+                new_map_String.put(key+"", String.valueOf(maprequest.get(key)==null? "":maprequest.get(key)));
+                System.out.println(key+" : "+String.valueOf(maprequest.get(key)));
             }
 
-            result=mtService.poiOpenS(maprequest,jsondata);
+            result=mtService.SetShopStatusS(new_map_String,jsondata);
+
         } catch (ApiSysException|ApiOpException|UnsupportedEncodingException e) {
             e.printStackTrace();
             return com.alibaba.fastjson.JSONObject.toJSONString(
