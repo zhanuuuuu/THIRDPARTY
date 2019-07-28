@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.hlyf.thirdparty.dao.miniprogram.meituanDao;
 import com.hlyf.thirdparty.domain.RepResult;
+import com.hlyf.thirdparty.domain.UserInfo;
 import com.hlyf.thirdparty.result.GlobalEumn;
 import com.hlyf.thirdparty.result.ResultMsg;
 import com.hlyf.thirdparty.tool.MapRemoveNullUtil;
@@ -196,6 +197,26 @@ public class CommonUtilImpl {
     public static String getSelResultComm(String data, meituanDao mtDao,String urlTitle) {
         try{
             List<RepResult> repResult= mtDao.ExecProceGetDataList(data);
+            if(repResult!=null && repResult.size()>0 && repResult.get(0).getResult().equals("1")){
+                return JSONObject.toJSONString(
+                        new ResultMsg(true, GlobalEumn.SUCCESS.getCode()+"",
+                                GlobalEumn.SUCCESS.getMesssage(),repResult));
+            }else {
+                return JSONObject.toJSONString(
+                        new ResultMsg(true, GlobalEumn.MINIPROGRAM_EMPTY.getCode()+"",
+                                GlobalEumn.MINIPROGRAM_EMPTY.getMesssage(),""));
+            }
+        }catch (Exception e){
+            log.error(Thread.currentThread().getStackTrace()[1].getMethodName() +urlTitle+" 调用我们的过程出错了 {}",e.getMessage());
+            return JSONObject.toJSONString(
+                    new ResultMsg(true, GlobalEumn.SYSTEM_ERROR.getCode()+"",
+                            GlobalEumn.SYSTEM_ERROR.getMesssage(),""));
+        }
+    }
+
+    public static String getUserInfoComm(String data, meituanDao mtDao,String urlTitle) {
+        try{
+            List<UserInfo> repResult= mtDao.GetUserInfo(data);
             if(repResult!=null && repResult.size()>0 && repResult.get(0).getResult().equals("1")){
                 return JSONObject.toJSONString(
                         new ResultMsg(true, GlobalEumn.SUCCESS.getCode()+"",

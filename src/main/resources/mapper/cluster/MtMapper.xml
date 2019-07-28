@@ -63,6 +63,15 @@
     	]]>
     </select>
 
+    <select id="GetUserInfo" parameterType="java.lang.String" resultType="com.hlyf.thirdparty.domain.UserInfo">
+        <![CDATA[
+        		{call p_hpCallJsonToSql_w(
+        					#{callJsonText,mode=IN,jdbcType=VARCHAR}
+        					)
+        		}
+    	]]>
+    </select>
+
     <!--商品 上架 下架-->
     <select id="GoodsSkusellStatusD" parameterType="java.lang.String" resultType="com.hlyf.thirdparty.domain.RepResult">
         <![CDATA[

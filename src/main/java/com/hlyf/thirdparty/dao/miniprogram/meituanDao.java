@@ -28,4 +28,6 @@ public interface meituanDao {
     RepResult GoodsSkusellStatusD(@Param("callJsonText")String callJsonText);
 
     MtConfig GetMtConfig(@Param("callJsonText")String callJsonText);
+
+    List<UserInfo> GetUserInfo(@Param("callJsonText")String callJsonText);
 }
