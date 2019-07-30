@@ -16,4 +16,6 @@ public interface UserConntrollerService {
     String UserComm(Map map, String data,String title) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
 
     String SelectUserInfoComm(Map map,String data,String title) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
+
+    String UserCommUpdateUserInfo(Map map, String data, String title) throws ApiSysException, ApiOpException, UnsupportedEncodingException;
 }

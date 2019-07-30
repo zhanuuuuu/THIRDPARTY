@@ -31,7 +31,7 @@ public class UserConntroller {
 
     @ApiOperation(value="小程序总部 新增员工 AddUser（线下）", notes="小程序总部 新增员工 AddUser（线下） " +
             "说明  ： " +
-            "  in:(virtualshopid：门店编号 phone:电话号码 name:姓名 password:密码 ) 备注：给出的示例只是公用参数 ")
+            "  in:(virtualshopid：门店编号 phone:电话号码 name:姓名 password:密码 data:[{virtualshopid:002},{}]) 备注：给出的示例只是公用参数 ")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "jsondata", value = "{\n" +
                     " \"sqltext\":\"AddUser\",\n" +
@@ -63,7 +63,7 @@ public class UserConntroller {
                 System.out.println(key+" : "+String.valueOf(maprequest.get(key)));
             }
 
-            result=userConntrollerService.AddUserS(new_map_String,jsondata);
+            result=userConntrollerService.AddUserS(maprequest,jsondata);
         } catch (ApiSysException |ApiOpException |UnsupportedEncodingException e) {
             e.printStackTrace();
             return com.alibaba.fastjson.JSONObject.toJSONString(
@@ -75,7 +75,7 @@ public class UserConntroller {
 
     @ApiOperation(value="小程序总部 修改员工信息 UpdateUserInfo（线下）", notes="小程序总部 修改员工信息 UpdateUserInfo （线下） " +
             "说明  ： " +
-            "  in:(name:姓名，virtualshopid：门店编号，password:密码 phone:手机号 flag:循环第一次传0，后面传1或其他\n" +
+            "  in:(name:姓名，virtualshopid：门店编号，password:密码 phone:手机号 data:[{},{}]\n" +
             "-- ) 备注：给出的示例只是公用参数 ")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "jsondata", value = "{\n" +
@@ -108,7 +108,7 @@ public class UserConntroller {
                 System.out.println(key+" : "+String.valueOf(maprequest.get(key)));
             }
 
-            result=userConntrollerService.UserComm(new_map_String,jsondata,"小程序总部 修改员工信息 UpdateUserInfo");
+            result=userConntrollerService.UserCommUpdateUserInfo(maprequest,jsondata,"小程序总部 修改员工信息 UpdateUserInfo");
         } catch (ApiSysException |ApiOpException |UnsupportedEncodingException e) {
             e.printStackTrace();
             return com.alibaba.fastjson.JSONObject.toJSONString(

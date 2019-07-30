@@ -234,6 +234,54 @@ public class CommonUtilImpl {
         }
     }
 
+    public static String CommExecProceAddUserOrUpdateUserInfo(String data, meituanDao mtDao,String urlTitle) {
+        try{
+
+                    JSONObject jsonObject=JSONObject.parseObject(data);
+                    JSONArray jsonArray=jsonObject.getJSONArray("data");
+                    if(jsonArray.size()>0){
+                        for(int i=0;i<jsonArray.size();i++){
+                            jsonObject.put("virtualshopid",jsonArray.getJSONObject(i).getString("virtualshopid"));
+                            jsonObject.put("flag",""+i);
+                            if(jsonArray.getJSONObject(i).containsKey("virtualshopName")){
+                                jsonObject.put("virtualshopName",jsonArray.getJSONObject(i).getString("virtualshopName"));
+                            }
+                            try{
+                                String data1=jsonObject.toJSONString();
+                                log.info("CommExecProceAddUserOrUpdateUserInfo :{} ",data1);
+                                RepResult repResult= mtDao.ExecProceGetData(data1);
+                                if(repResult!=null &&  repResult.getResult().equals("1")){
+                                }else {
+                                    return JSONObject.toJSONString(
+                                            new ResultMsg(true, GlobalEumn.PROCE_ERROR.getCode()+"",
+                                                    GlobalEumn.PROCE_ERROR.getMesssage(),""));
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                                return JSONObject.toJSONString(
+                                        new ResultMsg(true, GlobalEumn.PROCE_ERROR.getCode()+"",
+                                                GlobalEumn.PROCE_ERROR.getMesssage(),""));
+                            }
+                        }
+                        return JSONObject.toJSONString(
+                                new ResultMsg(true, GlobalEumn.SUCCESS.getCode()+"",
+                                        GlobalEumn.SUCCESS.getMesssage(),""));
+
+                    }else{
+                        return  JSONObject.toJSONString(
+                                new ResultMsg(true, GlobalEumn.SYSTEM_ERROR.getCode()+"",GlobalEumn.SYSTEM_ERROR.getMesssage(),""));
+                    }
+
+
+        }catch (Exception e){
+            log.error(Thread.currentThread().getStackTrace()[1].getMethodName() +urlTitle+" 调用我们的过程出错了 {}",e.getMessage());
+            return JSONObject.toJSONString(
+                    new ResultMsg(true, GlobalEumn.PROCE_ERROR.getCode()+"",
+                            GlobalEumn.PROCE_ERROR.getMesssage(),""));
+        }
+
+
+    }
 
     public static String CommExecProce(String data, meituanDao mtDao,String urlTitle) {
         try{

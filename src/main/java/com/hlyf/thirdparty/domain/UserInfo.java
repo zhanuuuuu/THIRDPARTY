@@ -21,5 +21,7 @@ public class UserInfo {
     private String name;
     private String virtualshopid;
     private String password;
+    private String VirtualShopName;
+    private String flag;
 
 }
