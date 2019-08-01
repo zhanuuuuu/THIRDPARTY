@@ -80,7 +80,7 @@ public class UserConntrollerServiceImpl implements UserConntrollerService {
                 log.info("原始数据 {} ",data);
                 String dataTrue= JSON.toJSONString(map);
                 log.info("转换出来的请求过程的数据 {} ",dataTrue);
-                resultString=CommonUtilImpl.CommExecProceAddUserOrUpdateUserInfo(dataTrue,this.MtDao,title);
+                resultString=CommonUtilImpl.CommExecProce(dataTrue,this.MtDao,title);
                 break;
             default:
                 log.info(Thread.currentThread().getStackTrace()[1].getMethodName()+"{}",data);

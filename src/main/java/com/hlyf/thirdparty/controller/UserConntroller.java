@@ -97,7 +97,6 @@ public class UserConntroller {
     public  String UpdateUserInfo(@RequestParam(value = "jsondata",required = true) String jsondata,
                            HttpServletRequest request){
         String result="";
-
         try {
             //第三种方式
             Map<String,Object> maprequest = JSON.parseObject(jsondata,Map.class);

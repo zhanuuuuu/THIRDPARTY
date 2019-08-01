@@ -1,7 +1,7 @@
 
 miniprogram:
   appid: wxba637106f41fe070
-  appsecret: 5099fcef0b531af4a997f3ecb0153011
+  appsecret:
 
 posmain:
   datasource:
